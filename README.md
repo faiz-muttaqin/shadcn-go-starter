@@ -2,10 +2,6 @@
 
 A full-stack admin dashboard starter built with **React + Vite** frontend and **Go + Gin** backend. Features a beautiful, responsive UI crafted with Shadcn UI components, complete REST API, authentication, and database integration.
 
-![alt text](public/images/shadcn-admin.png)
-
-[![Sponsored by Clerk](https://img.shields.io/badge/Sponsored%20by-Clerk-5b6ee1?logo=clerk)](https://go.clerk.com/GttUAaK)
-
 This project combines a modern React frontend with a powerful Go backend, providing a production-ready starter template for building admin dashboards and data-driven applications.
 
 ## Features
@@ -623,43 +619,3 @@ pnpm install
 **Problem:** CORS errors
 - Check `VITE_BASE` matches backend API prefix
 - Ensure backend CORS middleware is configured
-
-### Getting Help
-
-- 📖 Check the [Issues](https://github.com/faiz-muttaqin/shadcn-admin-go-starter/issues) page
-- 💬 Join discussions
-- 📧 Contact: [satnaingdev@gmail.com](mailto:satnaingdev@gmail.com)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## Sponsoring this project ❤️
-
-If you find this project helpful or use this in your own work, consider [sponsoring me](https://github.com/sponsors/satnaing) to support development and maintenance. You can [buy me a coffee](https://buymeacoffee.com/satnaing) as well. Don't worry, every penny helps. Thank you! 🙏
-
-For questions or sponsorship inquiries, feel free to reach out at [satnaingdev@gmail.com](mailto:satnaingdev@gmail.com).
-
-### Current Sponsor
-
-- [Clerk](https://go.clerk.com/GttUAaK) - authentication and user management for the modern web
-
-## Author
-
-Crafted with 🤍 by [@satnaing](https://github.com/satnaing) & [@faiz-muttaqin](https://github.com/faiz-muttaqin)
-
-## Acknowledgments
-
-- Original UI design inspiration from [Shadcn Admin](https://github.com/satnaing/shadcn-admin)
-- Built with amazing open-source tools and libraries
-- Community contributors and supporters
-
-## License
-
-Licensed under the [MIT License](https://choosealicense.com/licenses/mit/)
