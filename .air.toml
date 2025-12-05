@@ -1,0 +1,11 @@
+root = "."
+[build]
+
+  include_ext = ["go", "env", "info"]
+
+  exclude_dir = ["vendor", "node_modules","src","log", "cmd","dist","public","scripts","bin",".git"]
+
+  delay = 1000 # ms
+
+[log]
+  time = true

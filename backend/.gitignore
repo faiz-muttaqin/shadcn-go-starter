@@ -1,0 +1,92 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+
+/cypress/videos/
+/cypress/screenshots/
+
+# 👉 Custom Git ignores
+*.info
+main
+*.exe
+tmp
+
+# Large files (typically > 10MB)
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.iso
+*.dmg
+*.pkg
+
+# Large binary files
+*.a
+*.lib
+*.o
+*.obj
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.flv
+*.wmv
+*.m4v
+
+# Large images
+*.psd
+*.ai
+*.sketch
+*.fig
+
+# Database files (can be large)
+*.sqlite
+*.sqlite3
+*.db
+*.mdb
+*.accdb
+
+# Backup files (can be large)
+*.bak
+*.backup
+*.old
+*.orig
+
+# Large data files
+*.csv
+*.json
+*.xml
+# Note: You may want to comment out above if you need some of these
+log
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/*.code-snippets
+!.vscode/tours
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.yarn
+
+# Env files
+.env*
+!.env.example
