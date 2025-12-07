@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import { useAuthStore } from '@/stores/auth-store'
+import { clearClientAuth } from '@/lib/auth-utils'
 import { handleServerError } from '@/lib/handle-server-error'
 import { DirectionProvider } from './context/direction-provider'
 import { FontProvider } from './context/font-provider'
@@ -17,6 +17,7 @@ import { ThemeProvider } from './context/theme-provider'
 import { routeTree } from './routeTree.gen'
 // Styles
 import './styles/index.css'
+import { AuthProvider } from '@/hooks/auth-provider'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -53,7 +54,7 @@ const queryClient = new QueryClient({
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
           toast.error('Session expired!')
-          useAuthStore.getState().auth.reset()
+          clearClientAuth()
           const redirect = `${router.history.location.href}`
           router.navigate({ to: '/sign-in', search: { redirect } })
         }
@@ -98,7 +99,9 @@ if (!rootElement.innerHTML) {
         <ThemeProvider>
           <FontProvider>
             <DirectionProvider>
-              <RouterProvider router={router} />
+              <AuthProvider>
+                <RouterProvider router={router} />
+              </AuthProvider>
             </DirectionProvider>
           </FontProvider>
         </ThemeProvider>

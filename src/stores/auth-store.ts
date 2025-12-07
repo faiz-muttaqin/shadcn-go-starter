@@ -1,53 +1,12 @@
-import { create } from 'zustand'
-import { getCookie, setCookie, removeCookie } from '@/lib/cookies'
+// DEPRECATED compatibility shim for legacy imports of `useAuthStore`.
+// The app now uses `AuthProvider` + `useAuth()` context. Keep this file as a
+// light shim so any late/leftover imports don't crash; prefer removing this
+// entirely once the codebase is fully migrated.
+import { clearClientAuth } from '../lib/auth-utils'
 
-const ACCESS_TOKEN = 'thisisjustarandomstring'
-
-interface AuthUser {
-  accountNo: string
-  email: string
-  role: string[]
-  exp: number
+export const useAuthStore = {
+  // mimic the old `getState().auth.reset()` usage
+  getState: () => ({ auth: { reset: clearClientAuth } }),
 }
 
-interface AuthState {
-  auth: {
-    user: AuthUser | null
-    setUser: (user: AuthUser | null) => void
-    accessToken: string
-    setAccessToken: (accessToken: string) => void
-    resetAccessToken: () => void
-    reset: () => void
-  }
-}
-
-export const useAuthStore = create<AuthState>()((set) => {
-  const cookieState = getCookie(ACCESS_TOKEN)
-  const initToken = cookieState ? JSON.parse(cookieState) : ''
-  return {
-    auth: {
-      user: null,
-      setUser: (user) =>
-        set((state) => ({ ...state, auth: { ...state.auth, user } })),
-      accessToken: initToken,
-      setAccessToken: (accessToken) =>
-        set((state) => {
-          setCookie(ACCESS_TOKEN, JSON.stringify(accessToken))
-          return { ...state, auth: { ...state.auth, accessToken } }
-        }),
-      resetAccessToken: () =>
-        set((state) => {
-          removeCookie(ACCESS_TOKEN)
-          return { ...state, auth: { ...state.auth, accessToken: '' } }
-        }),
-      reset: () =>
-        set((state) => {
-          removeCookie(ACCESS_TOKEN)
-          return {
-            ...state,
-            auth: { ...state.auth, user: null, accessToken: '' },
-          }
-        }),
-    },
-  }
-})
+export default useAuthStore

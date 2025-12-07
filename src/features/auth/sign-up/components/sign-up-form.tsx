@@ -19,7 +19,7 @@ import { PasswordInput } from '@/components/PasswordInput'
 import { useNavigate, Link } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
-import { useAuthStore } from '@/stores/auth-store'
+import { useAuth } from '@/hooks/use-auth'
 // Firebase
 import { auth as firebaseAuth } from '@/lib/firebase'
 import {
@@ -53,7 +53,7 @@ export function SignUpForm({
 }: React.HTMLAttributes<HTMLFormElement>) {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
-  const { auth } = useAuthStore()
+  const { setUser, setAccessToken } = useAuth()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -77,8 +77,8 @@ export function SignUpForm({
         exp: 0,
       }
 
-      auth.setUser(userPayload)
-      auth.setAccessToken(token)
+      setUser(userPayload as unknown as import('@/types/auth').User)
+      setAccessToken(token)
       navigate({ to: '/', replace: true })
     } catch (err) {
       if (import.meta.env.DEV) console.error('finishSignIn error', err)

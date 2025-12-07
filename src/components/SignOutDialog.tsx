@@ -1,8 +1,6 @@
 import { useNavigate, useLocation } from '@tanstack/react-router'
-import { useAuthStore } from '@/stores/auth-store'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
-import { auth as firebaseAuth } from '@/lib/firebase'
-import { signOut } from 'firebase/auth'
+import { useAuth } from '@/hooks/use-auth'
 import { toast } from 'sonner'
 
 interface SignOutDialogProps {
@@ -13,14 +11,11 @@ interface SignOutDialogProps {
 export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
   const navigate = useNavigate()
   const location = useLocation()
-  const { auth } = useAuthStore()
+  const { signOut } = useAuth()
 
   const handleSignOut = async () => {
     try {
-      // Sign out from Firebase
-      await signOut(firebaseAuth)
-      // Clear local auth state
-      auth.reset()
+      await signOut()
       // Preserve current location for redirect after sign-in
       const currentPath = location.href
       navigate({

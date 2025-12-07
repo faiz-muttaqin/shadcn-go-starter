@@ -7,7 +7,7 @@ import { Loader2, LogIn } from 'lucide-react'
 import { toast } from 'sonner'
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { useAuthStore } from '@/stores/auth-store'
+import { useAuth } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -50,7 +50,7 @@ export function UserAuthForm({
 }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
-  const { auth } = useAuthStore()
+  const { setUser, setAccessToken } = useAuth()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -78,10 +78,11 @@ export function UserAuthForm({
           exp: Date.now() + 24 * 60 * 60 * 1000,
         }
 
-        auth.setUser(userPayload)
-        auth.setAccessToken(token)
+  // store a minimal snapshot immediately; provider will reconcile with backend
+  setUser(userPayload as unknown as import('@/types/auth').User)
+        setAccessToken(token)
 
-        const targetPath = redirectTo || '/'
+        const targetPath = redirectTo || '/dashboard'
         navigate({ to: targetPath, replace: true })
 
         return `Welcome back, ${cred.user.email ?? data.email}!`
@@ -116,8 +117,8 @@ export function UserAuthForm({
           exp: Date.now() + 24 * 60 * 60 * 1000,
         }
 
-        auth.setUser(userPayload)
-        auth.setAccessToken(token)
+        setUser(userPayload as unknown as import('@/types/auth').User)
+        setAccessToken(token)
 
         const targetPath = redirectTo || '/'
         navigate({ to: targetPath, replace: true })

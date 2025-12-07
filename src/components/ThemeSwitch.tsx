@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Check, Moon, Sun } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/context/theme-provider'
+import { useEditorStore } from '@/stores/editor-store'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,7 +12,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function ThemeSwitch() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { themeState, setThemeState } = useEditorStore()
 
   /* Update theme-color meta tag
    * when theme is updated */
@@ -20,6 +22,18 @@ export function ThemeSwitch() {
     const metaThemeColor = document.querySelector("meta[name='theme-color']")
     if (metaThemeColor) metaThemeColor.setAttribute('content', themeColor)
   }, [theme])
+
+  /* Sync editor store currentMode with resolved theme
+   * when resolvedTheme changes */
+  useEffect(() => {
+    const newMode = resolvedTheme === 'dark' ? 'dark' : 'light'
+    if (themeState.currentMode !== newMode) {
+      setThemeState({
+        ...themeState,
+        currentMode: newMode,
+      })
+    }
+  }, [resolvedTheme, themeState, setThemeState])
 
   return (
     <DropdownMenu modal={false}>

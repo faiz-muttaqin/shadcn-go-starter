@@ -1,5 +1,3 @@
-"use client";
-
 import { Circle, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,14 +10,14 @@ export function GithubCard() {
       <CardHeader>
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
-            <CardTitle>tweakcn</CardTitle>
+            <CardTitle>dashcn</CardTitle>
             <CardDescription>
               A visual editor for shadcn/ui components with beautiful themes. Accessible.
               Customizable. Open Source.
             </CardDescription>
           </div>
           <div className="bg-secondary text-secondary-foreground flex min-w-20 shrink-0 items-center space-x-1 rounded-md">
-            <a href="https://github.com/jnsahaj/tweakcn">
+            <a href="https://github.com/faiz-muttaqin/shadcn-go-starter">
               <Button variant="secondary" className="flex items-center gap-2 px-3 shadow-none">
                 <Star />
                 Star

@@ -1,7 +1,4 @@
-import { addDays } from "date-fns";
-import { addHours } from "date-fns";
-import { format } from "date-fns";
-import { nextSaturday } from "date-fns";
+import { addDays, addHours, format, nextSaturday } from "date-fns";
 import {
   Archive,
   ArchiveX,
@@ -13,17 +10,16 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { DropdownMenuContent, DropdownMenuItem,DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail } from "@/components/examples/mail/data";
+import { type Mail } from "@/components/examples/mail/data";
 import { useState } from "react";
 
 interface MailDisplayProps {

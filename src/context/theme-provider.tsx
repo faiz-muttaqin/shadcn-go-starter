@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState, useMemo } from 'react'
 import { getCookie, setCookie, removeCookie } from '@/lib/cookies'
+import { useEditorStore } from '@/stores/editor-store'
+import { applyThemeStyles } from '@/utils/apply-theme-styles'
 
 type Theme = 'dark' | 'light' | 'system'
 type ResolvedTheme = Exclude<Theme, 'system'>
@@ -42,6 +44,8 @@ export function ThemeProvider({
     () => (getCookie(storageKey) as Theme) || defaultTheme
   )
 
+  const { themeState, setThemeState } = useEditorStore()
+
   // Optimized: Memoize the resolved theme calculation to prevent unnecessary re-computations
   const resolvedTheme = useMemo((): ResolvedTheme => {
     if (theme === 'system') {
@@ -51,6 +55,22 @@ export function ThemeProvider({
     }
     return theme as ResolvedTheme
   }, [theme])
+
+  // Sync editor store currentMode with resolvedTheme
+  useEffect(() => {
+    const newMode = resolvedTheme === 'dark' ? 'dark' : 'light'
+    if (themeState.currentMode !== newMode) {
+      setThemeState({
+        ...themeState,
+        currentMode: newMode,
+      })
+    }
+  }, [resolvedTheme, themeState, setThemeState])
+
+  // Apply theme styles from editor store to CSS variables
+  useEffect(() => {
+    applyThemeStyles(themeState.styles, themeState.currentMode)
+  }, [themeState.styles, themeState.currentMode])
 
   useEffect(() => {
     const root = window.document.documentElement

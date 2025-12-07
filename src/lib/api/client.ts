@@ -1,6 +1,6 @@
 import { auth } from '@/lib/firebase';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || '/api';
+const BASE_URL = import.meta.env.VITE_BACKEND || '/api';
 
 export interface ApiResponse<T = unknown> {
 	success: boolean;
@@ -76,8 +76,19 @@ export class ApiClient {
 
 			const data: ApiResponse<T> = await response.json();
 
+				// If backend says unauthorized, clear stored firebase token so we
+				// don't keep optimistically assuming auth on next load.
+				if (response.status === 401) {
+					try {
+						localStorage.removeItem('firebase_id_token')
+					} catch {
+						// ignore
+					}
+					throw new Error(data.message || data.error || 'Unauthorized')
+				}
+
 			// Save table data to localStorage if present
-			if (data.table) {
+			if (data.table && typeof data.table === 'object') {
 				try {
 					localStorage.setItem('app_table', JSON.stringify(data.table));
 				} catch (e) {

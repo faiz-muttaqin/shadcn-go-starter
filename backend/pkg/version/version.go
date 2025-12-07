@@ -107,7 +107,7 @@ func Generate(path string) (*Info, error) {
 	}
 	now := time.Now()
 	var info Info
-	info.BasePath = util.Getenv("VITE_BASE", "")
+	info.BasePath = util.Getenv("VITE_BASE_PATH", "")
 	info.Host = util.Getenv("APP_LOCAL_HOST", "")
 
 	var originalData []byte

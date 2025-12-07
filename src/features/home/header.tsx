@@ -1,11 +1,10 @@
-import { FaGithub } from "react-icons/fa";
+// import { FaGithub } from "react-icons/fa";
 // import Logo from "@/assets/logo.svg";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Menu, X } from "lucide-react";
 import { motion } from "motion/react";
-// import a from "next/a";
-// import { ThemeToggle } from "../theme-toggle";
+import { ThemeSwitch } from "@/components/ThemeSwitch";
 
 interface HeaderProps {
   isScrolled: boolean;
@@ -19,20 +18,8 @@ const navbarItems = [
     href: "#examples",
   },
   {
-    label: "Features",
-    href: "#features",
-  },
-  {
-    label: "Pricing",
-    href: "/pricing",
-  },
-  {
-    label: "Roadmap",
-    href: "#roadmap",
-  },
-  {
-    label: "FAQ",
-    href: "#faq",
+    label: "Dashboard",
+    href: "/dashboard",
   },
 ];
 
@@ -61,7 +48,7 @@ export function Header({ isScrolled, mobileMenuOpen, setMobileMenuOpen }: Header
         <a href="/">
           <div className="flex items-center gap-2 font-bold">
             {/* <Logo className="size-6" /> */}
-            <span className="hidden lg:block">tweakcn</span>
+            <span className="hidden lg:block">dashcn</span>
           </div>
         </a>
         <nav className="hidden items-center gap-4 md:flex lg:gap-8">
@@ -81,14 +68,14 @@ export function Header({ isScrolled, mobileMenuOpen, setMobileMenuOpen }: Header
           ))}
         </nav>
         <div className="hidden cursor-pointer items-center gap-4 md:flex">
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, delay: 0.45 }}
           >
             <Button variant="ghost" asChild>
               <a
-                href="https://github.com/jnsahaj/tweakcn"
+                href="https://github.com/faiz-muttaqin/shadcn-go-starter"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold"
@@ -96,18 +83,14 @@ export function Header({ isScrolled, mobileMenuOpen, setMobileMenuOpen }: Header
                 <FaGithub className="size-5" />
               </a>
             </Button>
-          </motion.div>
+          </motion.div> */}
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, delay: 0.4 }}
           >
-            {/* <ThemeToggle
-              variant="secondary"
-              size="icon"
-              className="rounded-full transition-transform hover:scale-105"
-            /> */}
+            <ThemeSwitch/>
           </motion.div>
 
           <motion.div

@@ -1,12 +1,7 @@
-import {
-  createFileRoute, Link,
-  useNavigate,
-  useRouter,
-} from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { AuthenticatedLayout } from '@/components/layout/authenticated-layout'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { LearnMore } from '@/components/LearnMore'
 import { Loader2 } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 
@@ -15,10 +10,24 @@ export const Route = createFileRoute('/dashboard/_authenticated')({
 })
 
 function RouteAuthGuard() {
-  const { isLoading, user } = useAuth()
+  const { isLoading, user, hasLocalToken } = useAuth()
   const router = useRouter()
+  const navigate = useNavigate()
 
-  if (isLoading) {
+  const currentPath = router.state.location.pathname
+
+  // If the user is neither fully authenticated nor has an optimistic token,
+  // redirect to sign-in. If there's an optimistic token we allow the
+  // AuthenticatedLayout to render while background verification completes.
+  useEffect(() => {
+    if (user) return
+    if (!user && !hasLocalToken) {
+      navigate({ to: '/sign-in', search: { redirect: currentPath }, replace: true })
+    }
+  }, [user, hasLocalToken, navigate, currentPath])
+
+  // While verifying, prefer to show a spinner if no optimistic token is present
+  if (isLoading && !hasLocalToken) {
     return (
       <div className='flex h-svh items-center justify-center'>
         <Loader2 className='size-8 animate-spin' />
@@ -26,11 +35,14 @@ function RouteAuthGuard() {
     )
   }
 
-  if (!user) {
-    return <Unauthorized currentPath={router.state.location.pathname} />
+  // Allow access if authenticated or optimistic token exists
+  if (user || hasLocalToken) {
+    return <AuthenticatedLayout />
   }
 
-  return <AuthenticatedLayout />
+  // Fallback: render unauthorized UI (this should rarely be reached because
+  // we navigate away in the effect above when not authenticated)
+  return <Unauthorized currentPath={currentPath} />
 }
 
 const COUNTDOWN = 5 // Countdown second
@@ -39,18 +51,17 @@ function Unauthorized({ currentPath }: { currentPath: string }) {
   const navigate = useNavigate()
   const { history } = useRouter()
 
-  const [opened, setOpened] = useState(true)
   const [cancelled, setCancelled] = useState(false)
   const [countdown, setCountdown] = useState(COUNTDOWN)
 
   // Set and run the countdown conditionally
   useEffect(() => {
-    if (cancelled || opened) return
+    if (cancelled ) return
     const interval = setInterval(() => {
       setCountdown((prev) => (prev > 0 ? prev - 1 : 0))
     }, 1000)
     return () => clearInterval(interval)
-  }, [cancelled, opened])
+  }, [cancelled])
 
   // Navigate to sign-in page when countdown hits 0
   useEffect(() => {
@@ -68,9 +79,9 @@ function Unauthorized({ currentPath }: { currentPath: string }) {
         <h1 className='text-[7rem] leading-tight font-bold'>401</h1>
         <span className='font-medium'>Unauthorized Access</span>
         <p className='text-muted-foreground text-center'>
-          You must be authenticated via Clerk{' '}
+          You must be authenticated
           <sup>
-            <LearnMore open={opened} onOpenChange={setOpened}>
+            {/* <LearnMore open={opened} onOpenChange={_setOpened}>
               <p>
                 This is the same as{' '}
                 <Link
@@ -87,7 +98,7 @@ function Unauthorized({ currentPath }: { currentPath: string }) {
                 After signing in, you'll be able to sign out or delete your
                 account via the User Profile dropdown on this page.
               </p>
-            </LearnMore>
+            </LearnMore> */}
           </sup>
           <br />
           to access this resource.
@@ -101,7 +112,7 @@ function Unauthorized({ currentPath }: { currentPath: string }) {
           </Button>
         </div>
         <div className='mt-4 h-8 text-center'>
-          {!cancelled && !opened && (
+          {!cancelled && (
             <>
               <p>
                 {countdown > 0

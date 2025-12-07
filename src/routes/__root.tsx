@@ -6,43 +6,15 @@ import { Toaster } from '@/components/ui/sonner'
 import { NavigationProgress } from '@/components/NavigationProgress'
 import { GeneralError } from '@/features/errors/general-error'
 import { NotFoundError } from '@/features/errors/not-found-error'
-import { AuthProvider } from '@/hooks/use-auth'
-import { initializeApiClient } from '@/lib/api-client'
-import { auth as firebaseAuth } from '@/lib/firebase'
-import { useEffect } from 'react'
 
-// Component to initialize API client with Firebase token getter
-function ApiClientInitializer() {
-  useEffect(() => {
-    // Provide a function that returns current Firebase ID token or null
-    const getFirebaseToken = async () => {
-      try {
-        const user = firebaseAuth.currentUser
-        if (user) return await user.getIdToken()
-        return null
-      } catch (err) {
-        if (import.meta.env.DEV) {
-          console.error('Failed to get Firebase token', err)
-        }
-        return null
-      }
-    }
 
-    initializeApiClient(getFirebaseToken)
-  }, [])
-
-  return null
-}
 
 // Root component wrapper
 function RootComponent() {
   return (
     <>
       <NavigationProgress />
-      <ApiClientInitializer />
-      <AuthProvider>
-        <Outlet />
-      </AuthProvider>
+      <Outlet />
       <Toaster duration={5000} />
       {import.meta.env.MODE === 'development' && (
         <>

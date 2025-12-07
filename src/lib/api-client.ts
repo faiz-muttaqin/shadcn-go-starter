@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 
 // Create axios instance with default config
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: import.meta.env.VITE_BACKEND || '/api',
   timeout: 30000, // 30 seconds
   headers: {
     'Content-Type': 'application/json',
@@ -35,7 +35,6 @@ apiClient.interceptors.request.use(
     } catch (error) {
       // Silent fail - continue without token
       if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
         console.error('Failed to get auth token:', error)
       }
     }

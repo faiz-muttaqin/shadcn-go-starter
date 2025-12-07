@@ -11,7 +11,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ClerkRouteRouteImport } from './routes/clerk/route'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as errors503RouteImport } from './routes/(errors)/503'
@@ -19,21 +18,15 @@ import { Route as errors500RouteImport } from './routes/(errors)/500'
 import { Route as errors404RouteImport } from './routes/(errors)/404'
 import { Route as errors403RouteImport } from './routes/(errors)/403'
 import { Route as errors401RouteImport } from './routes/(errors)/401'
-import { Route as authSignUp2RouteImport } from './routes/(auth)/sign-up-2'
 import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
-import { Route as authSignIn2RouteImport } from './routes/(auth)/sign-in-2'
 import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
+import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authOtpRouteImport } from './routes/(auth)/otp'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as DashboardAuthenticatedRouteRouteImport } from './routes/dashboard/_authenticated/route'
-import { Route as ClerkAuthenticatedRouteRouteImport } from './routes/clerk/_authenticated/route'
-import { Route as ClerkauthRouteRouteImport } from './routes/clerk/(auth)/route'
 import { Route as EditorThemeIndexRouteImport } from './routes/editor/theme/index'
 import { Route as DashboardAuthenticatedIndexRouteImport } from './routes/dashboard/_authenticated/index'
-import { Route as ClerkAuthenticatedUserManagementOldRouteImport } from './routes/clerk/_authenticated/user-management-old'
-import { Route as ClerkAuthenticatedUserManagementRouteImport } from './routes/clerk/_authenticated/user-management'
-import { Route as ClerkauthSignUpRouteImport } from './routes/clerk/(auth)/sign-up'
-import { Route as ClerkauthSignInRouteImport } from './routes/clerk/(auth)/sign-in'
 import { Route as DashboardAuthenticatedSettingsRouteRouteImport } from './routes/dashboard/_authenticated/settings/route'
 import { Route as DashboardAuthenticatedUsersIndexRouteImport } from './routes/dashboard/_authenticated/users/index'
 import { Route as DashboardAuthenticatedTasksIndexRouteImport } from './routes/dashboard/_authenticated/tasks/index'
@@ -52,11 +45,6 @@ const DashboardRouteImport = createFileRoute('/dashboard')()
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClerkRouteRoute = ClerkRouteRouteImport.update({
-  id: '/clerk',
-  path: '/clerk',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authRouteRoute = authRouteRouteImport.update({
@@ -93,19 +81,9 @@ const errors401Route = errors401RouteImport.update({
   path: '/401',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authSignUp2Route = authSignUp2RouteImport.update({
-  id: '/sign-up-2',
-  path: '/sign-up-2',
-  getParentRoute: () => authRouteRoute,
-} as any)
 const authSignUpRoute = authSignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
-  getParentRoute: () => authRouteRoute,
-} as any)
-const authSignIn2Route = authSignIn2RouteImport.update({
-  id: '/sign-in-2',
-  path: '/sign-in-2',
   getParentRoute: () => authRouteRoute,
 } as any)
 const authSignInRoute = authSignInRouteImport.update({
@@ -113,9 +91,19 @@ const authSignInRoute = authSignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => authRouteRoute,
 } as any)
+const authRegisterRoute = authRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => authRouteRoute,
+} as any)
 const authOtpRoute = authOtpRouteImport.update({
   id: '/otp',
   path: '/otp',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => authRouteRoute,
 } as any)
 const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
@@ -128,14 +116,6 @@ const DashboardAuthenticatedRouteRoute =
     id: '/_authenticated',
     getParentRoute: () => DashboardRoute,
   } as any)
-const ClerkAuthenticatedRouteRoute = ClerkAuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => ClerkRouteRoute,
-} as any)
-const ClerkauthRouteRoute = ClerkauthRouteRouteImport.update({
-  id: '/(auth)',
-  getParentRoute: () => ClerkRouteRoute,
-} as any)
 const EditorThemeIndexRoute = EditorThemeIndexRouteImport.update({
   id: '/editor/theme/',
   path: '/editor/theme/',
@@ -147,28 +127,6 @@ const DashboardAuthenticatedIndexRoute =
     path: '/',
     getParentRoute: () => DashboardAuthenticatedRouteRoute,
   } as any)
-const ClerkAuthenticatedUserManagementOldRoute =
-  ClerkAuthenticatedUserManagementOldRouteImport.update({
-    id: '/user-management-old',
-    path: '/user-management-old',
-    getParentRoute: () => ClerkAuthenticatedRouteRoute,
-  } as any)
-const ClerkAuthenticatedUserManagementRoute =
-  ClerkAuthenticatedUserManagementRouteImport.update({
-    id: '/user-management',
-    path: '/user-management',
-    getParentRoute: () => ClerkAuthenticatedRouteRoute,
-  } as any)
-const ClerkauthSignUpRoute = ClerkauthSignUpRouteImport.update({
-  id: '/sign-up',
-  path: '/sign-up',
-  getParentRoute: () => ClerkauthRouteRoute,
-} as any)
-const ClerkauthSignInRoute = ClerkauthSignInRouteImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
-  getParentRoute: () => ClerkauthRouteRoute,
-} as any)
 const DashboardAuthenticatedSettingsRouteRoute =
   DashboardAuthenticatedSettingsRouteRouteImport.update({
     id: '/settings',
@@ -244,25 +202,19 @@ const DashboardAuthenticatedErrorsErrorRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof authRouteRouteWithChildren
-  '/clerk': typeof ClerkAuthenticatedRouteRouteWithChildren
-  '/clerk/': typeof ClerkauthRouteRouteWithChildren
   '/dashboard': typeof DashboardAuthenticatedRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
+  '/login': typeof authLoginRoute
   '/otp': typeof authOtpRoute
+  '/register': typeof authRegisterRoute
   '/sign-in': typeof authSignInRoute
-  '/sign-in-2': typeof authSignIn2Route
   '/sign-up': typeof authSignUpRoute
-  '/sign-up-2': typeof authSignUp2Route
   '/401': typeof errors401Route
   '/403': typeof errors403Route
   '/404': typeof errors404Route
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/dashboard/settings': typeof DashboardAuthenticatedSettingsRouteRouteWithChildren
-  '/clerk/sign-in': typeof ClerkauthSignInRoute
-  '/clerk/sign-up': typeof ClerkauthSignUpRoute
-  '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
-  '/clerk/user-management-old': typeof ClerkAuthenticatedUserManagementOldRoute
   '/dashboard/': typeof DashboardAuthenticatedIndexRoute
   '/editor/theme': typeof EditorThemeIndexRoute
   '/dashboard/errors/$error': typeof DashboardAuthenticatedErrorsErrorRoute
@@ -279,23 +231,18 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof authRouteRouteWithChildren
-  '/clerk': typeof ClerkAuthenticatedRouteRouteWithChildren
   '/dashboard': typeof DashboardAuthenticatedIndexRoute
   '/forgot-password': typeof authForgotPasswordRoute
+  '/login': typeof authLoginRoute
   '/otp': typeof authOtpRoute
+  '/register': typeof authRegisterRoute
   '/sign-in': typeof authSignInRoute
-  '/sign-in-2': typeof authSignIn2Route
   '/sign-up': typeof authSignUpRoute
-  '/sign-up-2': typeof authSignUp2Route
   '/401': typeof errors401Route
   '/403': typeof errors403Route
   '/404': typeof errors404Route
   '/500': typeof errors500Route
   '/503': typeof errors503Route
-  '/clerk/sign-in': typeof ClerkauthSignInRoute
-  '/clerk/sign-up': typeof ClerkauthSignUpRoute
-  '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
-  '/clerk/user-management-old': typeof ClerkAuthenticatedUserManagementOldRoute
   '/editor/theme': typeof EditorThemeIndexRoute
   '/dashboard/errors/$error': typeof DashboardAuthenticatedErrorsErrorRoute
   '/dashboard/settings/account': typeof DashboardAuthenticatedSettingsAccountRoute
@@ -313,27 +260,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(auth)': typeof authRouteRouteWithChildren
-  '/clerk': typeof ClerkRouteRouteWithChildren
-  '/clerk/(auth)': typeof ClerkauthRouteRouteWithChildren
-  '/clerk/_authenticated': typeof ClerkAuthenticatedRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/_authenticated': typeof DashboardAuthenticatedRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
+  '/(auth)/login': typeof authLoginRoute
   '/(auth)/otp': typeof authOtpRoute
+  '/(auth)/register': typeof authRegisterRoute
   '/(auth)/sign-in': typeof authSignInRoute
-  '/(auth)/sign-in-2': typeof authSignIn2Route
   '/(auth)/sign-up': typeof authSignUpRoute
-  '/(auth)/sign-up-2': typeof authSignUp2Route
   '/(errors)/401': typeof errors401Route
   '/(errors)/403': typeof errors403Route
   '/(errors)/404': typeof errors404Route
   '/(errors)/500': typeof errors500Route
   '/(errors)/503': typeof errors503Route
   '/dashboard/_authenticated/settings': typeof DashboardAuthenticatedSettingsRouteRouteWithChildren
-  '/clerk/(auth)/sign-in': typeof ClerkauthSignInRoute
-  '/clerk/(auth)/sign-up': typeof ClerkauthSignUpRoute
-  '/clerk/_authenticated/user-management': typeof ClerkAuthenticatedUserManagementRoute
-  '/clerk/_authenticated/user-management-old': typeof ClerkAuthenticatedUserManagementOldRoute
   '/dashboard/_authenticated/': typeof DashboardAuthenticatedIndexRoute
   '/editor/theme/': typeof EditorThemeIndexRoute
   '/dashboard/_authenticated/errors/$error': typeof DashboardAuthenticatedErrorsErrorRoute
@@ -352,25 +292,19 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/clerk'
-    | '/clerk/'
     | '/dashboard'
     | '/forgot-password'
+    | '/login'
     | '/otp'
+    | '/register'
     | '/sign-in'
-    | '/sign-in-2'
     | '/sign-up'
-    | '/sign-up-2'
     | '/401'
     | '/403'
     | '/404'
     | '/500'
     | '/503'
     | '/dashboard/settings'
-    | '/clerk/sign-in'
-    | '/clerk/sign-up'
-    | '/clerk/user-management'
-    | '/clerk/user-management-old'
     | '/dashboard/'
     | '/editor/theme'
     | '/dashboard/errors/$error'
@@ -387,23 +321,18 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/clerk'
     | '/dashboard'
     | '/forgot-password'
+    | '/login'
     | '/otp'
+    | '/register'
     | '/sign-in'
-    | '/sign-in-2'
     | '/sign-up'
-    | '/sign-up-2'
     | '/401'
     | '/403'
     | '/404'
     | '/500'
     | '/503'
-    | '/clerk/sign-in'
-    | '/clerk/sign-up'
-    | '/clerk/user-management'
-    | '/clerk/user-management-old'
     | '/editor/theme'
     | '/dashboard/errors/$error'
     | '/dashboard/settings/account'
@@ -420,27 +349,20 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/(auth)'
-    | '/clerk'
-    | '/clerk/(auth)'
-    | '/clerk/_authenticated'
     | '/dashboard'
     | '/dashboard/_authenticated'
     | '/(auth)/forgot-password'
+    | '/(auth)/login'
     | '/(auth)/otp'
+    | '/(auth)/register'
     | '/(auth)/sign-in'
-    | '/(auth)/sign-in-2'
     | '/(auth)/sign-up'
-    | '/(auth)/sign-up-2'
     | '/(errors)/401'
     | '/(errors)/403'
     | '/(errors)/404'
     | '/(errors)/500'
     | '/(errors)/503'
     | '/dashboard/_authenticated/settings'
-    | '/clerk/(auth)/sign-in'
-    | '/clerk/(auth)/sign-up'
-    | '/clerk/_authenticated/user-management'
-    | '/clerk/_authenticated/user-management-old'
     | '/dashboard/_authenticated/'
     | '/editor/theme/'
     | '/dashboard/_authenticated/errors/$error'
@@ -459,7 +381,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authRouteRoute: typeof authRouteRouteWithChildren
-  ClerkRouteRoute: typeof ClerkRouteRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
   errors401Route: typeof errors401Route
   errors403Route: typeof errors403Route
@@ -476,13 +397,6 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/clerk': {
-      id: '/clerk'
-      path: '/clerk'
-      fullPath: '/clerk'
-      preLoaderRoute: typeof ClerkRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)': {
@@ -534,25 +448,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof errors401RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/sign-up-2': {
-      id: '/(auth)/sign-up-2'
-      path: '/sign-up-2'
-      fullPath: '/sign-up-2'
-      preLoaderRoute: typeof authSignUp2RouteImport
-      parentRoute: typeof authRouteRoute
-    }
     '/(auth)/sign-up': {
       id: '/(auth)/sign-up'
       path: '/sign-up'
       fullPath: '/sign-up'
       preLoaderRoute: typeof authSignUpRouteImport
-      parentRoute: typeof authRouteRoute
-    }
-    '/(auth)/sign-in-2': {
-      id: '/(auth)/sign-in-2'
-      path: '/sign-in-2'
-      fullPath: '/sign-in-2'
-      preLoaderRoute: typeof authSignIn2RouteImport
       parentRoute: typeof authRouteRoute
     }
     '/(auth)/sign-in': {
@@ -562,11 +462,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authSignInRouteImport
       parentRoute: typeof authRouteRoute
     }
+    '/(auth)/register': {
+      id: '/(auth)/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof authRegisterRouteImport
+      parentRoute: typeof authRouteRoute
+    }
     '/(auth)/otp': {
       id: '/(auth)/otp'
       path: '/otp'
       fullPath: '/otp'
       preLoaderRoute: typeof authOtpRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
       parentRoute: typeof authRouteRoute
     }
     '/(auth)/forgot-password': {
@@ -583,20 +497,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAuthenticatedRouteRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/clerk/_authenticated': {
-      id: '/clerk/_authenticated'
-      path: ''
-      fullPath: '/clerk'
-      preLoaderRoute: typeof ClerkAuthenticatedRouteRouteImport
-      parentRoute: typeof ClerkRouteRoute
-    }
-    '/clerk/(auth)': {
-      id: '/clerk/(auth)'
-      path: '/'
-      fullPath: '/clerk/'
-      preLoaderRoute: typeof ClerkauthRouteRouteImport
-      parentRoute: typeof ClerkRouteRoute
-    }
     '/editor/theme/': {
       id: '/editor/theme/'
       path: '/editor/theme'
@@ -610,34 +510,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardAuthenticatedIndexRouteImport
       parentRoute: typeof DashboardAuthenticatedRouteRoute
-    }
-    '/clerk/_authenticated/user-management-old': {
-      id: '/clerk/_authenticated/user-management-old'
-      path: '/user-management-old'
-      fullPath: '/clerk/user-management-old'
-      preLoaderRoute: typeof ClerkAuthenticatedUserManagementOldRouteImport
-      parentRoute: typeof ClerkAuthenticatedRouteRoute
-    }
-    '/clerk/_authenticated/user-management': {
-      id: '/clerk/_authenticated/user-management'
-      path: '/user-management'
-      fullPath: '/clerk/user-management'
-      preLoaderRoute: typeof ClerkAuthenticatedUserManagementRouteImport
-      parentRoute: typeof ClerkAuthenticatedRouteRoute
-    }
-    '/clerk/(auth)/sign-up': {
-      id: '/clerk/(auth)/sign-up'
-      path: '/sign-up'
-      fullPath: '/clerk/sign-up'
-      preLoaderRoute: typeof ClerkauthSignUpRouteImport
-      parentRoute: typeof ClerkauthRouteRoute
-    }
-    '/clerk/(auth)/sign-in': {
-      id: '/clerk/(auth)/sign-in'
-      path: '/sign-in'
-      fullPath: '/clerk/sign-in'
-      preLoaderRoute: typeof ClerkauthSignInRouteImport
-      parentRoute: typeof ClerkauthRouteRoute
     }
     '/dashboard/_authenticated/settings': {
       id: '/dashboard/_authenticated/settings'
@@ -728,70 +600,24 @@ declare module '@tanstack/react-router' {
 
 interface authRouteRouteChildren {
   authForgotPasswordRoute: typeof authForgotPasswordRoute
+  authLoginRoute: typeof authLoginRoute
   authOtpRoute: typeof authOtpRoute
+  authRegisterRoute: typeof authRegisterRoute
   authSignInRoute: typeof authSignInRoute
-  authSignIn2Route: typeof authSignIn2Route
   authSignUpRoute: typeof authSignUpRoute
-  authSignUp2Route: typeof authSignUp2Route
 }
 
 const authRouteRouteChildren: authRouteRouteChildren = {
   authForgotPasswordRoute: authForgotPasswordRoute,
+  authLoginRoute: authLoginRoute,
   authOtpRoute: authOtpRoute,
+  authRegisterRoute: authRegisterRoute,
   authSignInRoute: authSignInRoute,
-  authSignIn2Route: authSignIn2Route,
   authSignUpRoute: authSignUpRoute,
-  authSignUp2Route: authSignUp2Route,
 }
 
 const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
   authRouteRouteChildren,
-)
-
-interface ClerkauthRouteRouteChildren {
-  ClerkauthSignInRoute: typeof ClerkauthSignInRoute
-  ClerkauthSignUpRoute: typeof ClerkauthSignUpRoute
-}
-
-const ClerkauthRouteRouteChildren: ClerkauthRouteRouteChildren = {
-  ClerkauthSignInRoute: ClerkauthSignInRoute,
-  ClerkauthSignUpRoute: ClerkauthSignUpRoute,
-}
-
-const ClerkauthRouteRouteWithChildren = ClerkauthRouteRoute._addFileChildren(
-  ClerkauthRouteRouteChildren,
-)
-
-interface ClerkAuthenticatedRouteRouteChildren {
-  ClerkAuthenticatedUserManagementRoute: typeof ClerkAuthenticatedUserManagementRoute
-  ClerkAuthenticatedUserManagementOldRoute: typeof ClerkAuthenticatedUserManagementOldRoute
-}
-
-const ClerkAuthenticatedRouteRouteChildren: ClerkAuthenticatedRouteRouteChildren =
-  {
-    ClerkAuthenticatedUserManagementRoute:
-      ClerkAuthenticatedUserManagementRoute,
-    ClerkAuthenticatedUserManagementOldRoute:
-      ClerkAuthenticatedUserManagementOldRoute,
-  }
-
-const ClerkAuthenticatedRouteRouteWithChildren =
-  ClerkAuthenticatedRouteRoute._addFileChildren(
-    ClerkAuthenticatedRouteRouteChildren,
-  )
-
-interface ClerkRouteRouteChildren {
-  ClerkauthRouteRoute: typeof ClerkauthRouteRouteWithChildren
-  ClerkAuthenticatedRouteRoute: typeof ClerkAuthenticatedRouteRouteWithChildren
-}
-
-const ClerkRouteRouteChildren: ClerkRouteRouteChildren = {
-  ClerkauthRouteRoute: ClerkauthRouteRouteWithChildren,
-  ClerkAuthenticatedRouteRoute: ClerkAuthenticatedRouteRouteWithChildren,
-}
-
-const ClerkRouteRouteWithChildren = ClerkRouteRoute._addFileChildren(
-  ClerkRouteRouteChildren,
 )
 
 interface DashboardAuthenticatedSettingsRouteRouteChildren {
@@ -871,7 +697,6 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authRouteRoute: authRouteRouteWithChildren,
-  ClerkRouteRoute: ClerkRouteRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
   errors401Route: errors401Route,
   errors403Route: errors403Route,

@@ -582,7 +582,7 @@ func buildCommonSchemas() map[string]interface{} {
 
 // Get tag from path for better organization
 func getTagFromPath(path string) string {
-	basePath := os.Getenv("VITE_BASE")
+	basePath := os.Getenv("VITE_BASE_PATH")
 	cleanPath := strings.TrimPrefix(path, basePath)
 	if cleanPath == "" || cleanPath == "/" {
 		return "default"

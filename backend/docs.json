@@ -87,7 +87,7 @@
   "info": {
     "description": "API Documentation for shadcn-admin-go-starter",
     "title": "shadcn-admin-go-starter",
-    "version": "2.2.794"
+    "version": "2.2.808"
   },
   "openapi": "3.0.4",
   "paths": {
@@ -12038,9 +12038,9 @@
       }
     },
     "/api/auth/login": {
-      "get": {
-        "description": "Retrieve a list of resources with optional filtering and pagination",
-        "operationId": "getApiAuthLogin",
+      "options": {
+        "description": "Perform options operation on /api/auth/login",
+        "operationId": "optionsApiAuthLogin",
         "parameters": null,
         "requestBody": {},
         "responses": {
@@ -12087,16 +12087,6 @@
             },
             "description": "Forbidden - Insufficient permissions"
           },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Not found - Resource does not exist"
-          },
           "500": {
             "content": {
               "application/json": {
@@ -12109,9 +12099,9 @@
           }
         },
         "security": null,
-        "summary": "Get all GetAuthLogin",
+        "summary": "OPTIONS Get Auth Login",
         "tags": [
-          "Auth"
+          "Api"
         ]
       }
     },
@@ -12186,7 +12176,7 @@
         "security": null,
         "summary": "Get all GetAuthLogout",
         "tags": [
-          "Auth"
+          "Api"
         ]
       }
     },
@@ -12265,7 +12255,7 @@
         "security": null,
         "summary": "Get all VerifyAuth",
         "tags": [
-          "Auth"
+          "Api"
         ]
       }
     },
@@ -12353,7 +12343,7 @@
         "security": null,
         "summary": "Get all GetOptions",
         "tags": [
-          "Options"
+          "Api"
         ]
       }
     },
@@ -12423,7 +12413,7 @@
         "security": null,
         "summary": "Get all GetRoles",
         "tags": [
-          "Roles"
+          "Api"
         ]
       }
     },
@@ -12530,7 +12520,7 @@
         "security": null,
         "summary": "Delete DELETE_DEFAULT_TableDataHandler",
         "tags": [
-          "Users"
+          "Api"
         ]
       }
     },

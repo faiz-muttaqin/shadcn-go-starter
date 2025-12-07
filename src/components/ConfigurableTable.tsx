@@ -34,11 +34,11 @@ import {
 } from '@/components/ui/table'
 import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
-import { getTableSettingsByName } from '@/lib/auth-service'
+import { StorageHelper } from '@/lib/api/storage'
 import type { TableSettings, TableColumn } from '@/types/auth'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueries } from '@tanstack/react-query'
 import apiClient from '@/lib/api-client'
-import { useFilterOptions, type FilterOption } from '@/hooks/use-filter-options'
+import { type FilterOption } from '@/hooks/use-filter-options'
 import { type IconName } from 'lucide-react/dynamic'
 import { Checkbox } from './ui/checkbox'
 import { ConfigurableTableCreateEditDialog } from './ConfigurableTableCreateEditDialog'
@@ -217,29 +217,43 @@ function useColumnFilters(columns: TableColumn[]) {
         [columns]
     )
 
-    // Fetch options for each selection column
-    const filterQueries = selectionColumns.map((col) => ({
-        column: col,
-        query: useFilterOptions(col.selection!),
-    }))
+    // Use react-query's useQueries to fetch options for each selection column
+    const queries = useQueries({
+        queries: selectionColumns.map((col) => ({
+            queryKey: ['filter-options', col.selection],
+            queryFn: async () => {
+                const response = await apiClient.get(col.selection!)
+                return response.data
+            },
+            enabled: !!col.selection,
+            staleTime: 5 * 60 * 1000,
+        })),
+    })
 
-    // Build filters array from fetched data
-    const filters = useMemo(() => {
-        return filterQueries
-            .filter((fq) => fq.query.isSuccess && fq.query.data)
-            .map((fq) => ({
-                data: fq.column.data,
-                title: fq.query.data!.title || fq.column.name,
-                options: fq.query.data!.options.map((opt: FilterOption) => ({
+    // Build filters array from fetched data (zip selectionColumns with queries)
+    const filters = selectionColumns
+        .map((col, idx) => {
+            const q = queries[idx]
+            if (!q) return null
+            if (!q.isSuccess || !q.data) return null
+            return {
+                data: col.data,
+                title: q.data!.title || col.name,
+                options: q.data!.options.map((opt: FilterOption) => ({
                     label: opt.label,
                     value: opt.value,
                     icon: opt.icon as IconName | undefined,
                 })),
-            }))
-    }, [filterQueries])
+            }
+        })
+        .filter(Boolean) as {
+        data: string
+        title: string
+        options: { label: string; value: string; icon?: IconName }[]
+    }[]
 
     // Check if any queries are still loading
-    const isLoadingFilters = filterQueries.some((fq) => fq.query.isLoading)
+    const isLoadingFilters = queries.some((q) => q.isLoading)
 
     // Get text search columns (filterable but no selection URL)
     const textSearchColumns = useMemo(
@@ -256,8 +270,9 @@ export function ConfigurableTable({
     navigate: _navigate,
     mode = 'client'
 }: ConfigurableTableProps) {
-    // Load table config from localStorage
-    const tableConfig: TableSettings | null = getTableSettingsByName(tableName)
+    // Load table config from localStorage (stored under key `t_<tableName>`)
+    const rawTable = StorageHelper.getTableData(`t_${tableName}`)
+    const tableConfig: TableSettings | null = rawTable ? (rawTable as TableSettings) : null
 
     // Edit dialog state
     const [createEditDialogOpen, setCreateEditDialogOpen] = useState(false)

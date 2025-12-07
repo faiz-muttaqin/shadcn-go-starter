@@ -1,15 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useEffect, useState } from "react";
 import { Header } from "@/features/home/header";
 import { Hero } from "@/features/home/hero";
 import { ThemePresetSelector } from "@/features/home/theme-preset-selector";
-// import { Footer } from "@/features/footer";
-// import { CTA } from "@/features/home/cta";
-// import { FAQ } from "@/features/home/faq";
-// import { Features } from "@/features/home/features";
-// import { HowItWorks } from "@/features/home/how-it-works";
-// import { Roadmap } from "@/features/home/roadmap";
-// import { Testimonials } from "@/features/home/testimonials";
-import { useEffect, useState } from "react";
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
