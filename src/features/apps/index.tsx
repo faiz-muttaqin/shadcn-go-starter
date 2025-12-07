@@ -14,9 +14,15 @@ import { Separator } from '@/components/ui/separator'
 import { Main } from '@/components/layout/main'
 import { apps } from './data/apps'
 
-const route = getRouteApi('/_authenticated/apps/')
+const route = getRouteApi('/dashboard/_authenticated/apps/')
 
 type AppType = 'all' | 'connected' | 'notConnected'
+
+type AppsSearch = {
+  filter?: string
+  type?: AppType
+  sort?: 'asc' | 'desc'
+}
 
 const appText = new Map<AppType, string>([
   ['all', 'All Apps'],
@@ -54,7 +60,7 @@ export function Apps() {
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
     navigate({
-      search: (prev) => ({
+      search: (prev: AppsSearch) => ({
         ...prev,
         filter: e.target.value || undefined,
       }),
@@ -64,7 +70,7 @@ export function Apps() {
   const handleTypeChange = (value: AppType) => {
     setAppType(value)
     navigate({
-      search: (prev) => ({
+      search: (prev: AppsSearch) => ({
         ...prev,
         type: value === 'all' ? undefined : value,
       }),
@@ -73,7 +79,7 @@ export function Apps() {
 
   const handleSortChange = (sort: 'asc' | 'desc') => {
     setSort(sort)
-    navigate({ search: (prev) => ({ ...prev, sort }) })
+    navigate({ search: (prev: AppsSearch) => ({ ...prev, sort }) })
   }
 
   return (

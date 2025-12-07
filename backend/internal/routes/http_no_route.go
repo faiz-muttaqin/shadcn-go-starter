@@ -26,7 +26,7 @@ func NoRouteDefaultFiles(embedDistFolder fs.FS, isDevMode bool) []string {
 	if isDevMode {
 		useFrontendProxy = CheckIsProxyAvailable()
 	}
-	files, _ := fs.Sub(embedDistFolder, "dist")
+	files, _ := fs.Sub(embedDistFolder, "build")
 	subFS, err := fs.Sub(files, ".")
 	if err != nil {
 		panic(err)
@@ -60,6 +60,7 @@ func NoRouteDefaultFiles(embedDistFolder fs.FS, isDevMode bool) []string {
 			} else if useFrontendProxy {
 				return nil
 			}
+			route = strings.TrimSuffix(route, ".html")
 			routeList = append(routeList, route)
 			// daftarkan handler untuk setiap file
 			route, _ = url.JoinPath(os.Getenv("VITE_BASE_PATH"), route)

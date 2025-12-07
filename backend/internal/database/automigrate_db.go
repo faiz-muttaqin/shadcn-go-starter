@@ -20,8 +20,8 @@ func AutoMigrateDB(db *gorm.DB) error {
 	// Pastikan role default tersedia
 	db.FirstOrCreate(&model.UserRole{
 		ID:    1,
-		Title: "Super User",
-		Name:  "super_user",
+		Title: "Super Admin",
+		Name:  "superadmin",
 		Icon:  "bx bx-sparkle",
 	})
 

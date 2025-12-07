@@ -5,9 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Loader2, LogIn } from 'lucide-react'
 import { toast } from 'sonner'
-import { IconFacebook, IconGithub } from '@/assets/brand-icons'
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { useAuthStore } from '@/stores/auth-store'
-import { sleep, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -19,6 +20,14 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/PasswordInput'
+// Firebase
+import { auth as firebaseAuth } from '@/lib/firebase'
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+} from 'firebase/auth'
 
 const formSchema = z.object({
   email: z.email({
@@ -51,33 +60,79 @@ export function UserAuthForm({
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
 
-    toast.promise(sleep(2000), {
-      loading: 'Signing in...',
-      success: () => {
-        setIsLoading(false)
+    const p = signInWithEmailAndPassword(
+      firebaseAuth,
+      data.email,
+      data.password
+    )
+      .then(async (cred) => {
+        const token = await cred.user.getIdToken()
 
-        // Mock successful authentication with expiry computed at success time
-        const mockUser = {
-          accountNo: 'ACC001',
-          email: data.email,
+        const userPayload = {
+          accountNo: cred.user.uid,
+          email: cred.user.email ?? data.email,
           role: ['user'],
-          exp: Date.now() + 24 * 60 * 60 * 1000, // 24 hours from now
+          exp: Date.now() + 24 * 60 * 60 * 1000,
         }
 
-        // Set user and access token
-        auth.setUser(mockUser)
-        auth.setAccessToken('mock-access-token')
+        auth.setUser(userPayload)
+        auth.setAccessToken(token)
 
-        // Redirect to the stored location or default to dashboard
         const targetPath = redirectTo || '/'
         navigate({ to: targetPath, replace: true })
 
-        return `Welcome back, ${data.email}!`
-      },
-      error: 'Error',
+        return `Welcome back, ${cred.user.email ?? data.email}!`
+      })
+      .catch((err) => {
+        // rethrow to let toast.promise show error
+        throw err
+      })
+      .finally(() => setIsLoading(false))
+
+    toast.promise(p, {
+      loading: 'Signing in...',
+      success: (msg) => msg as string,
+      error: (err) => (err as Error).message || 'Error signing in',
+    })
+  }
+
+  async function handleOAuthLogin(providerName: 'google' | 'github') {
+    setIsLoading(true)
+
+    const provider =
+      providerName === 'google' ? new GoogleAuthProvider() : new GithubAuthProvider()
+
+    const p = signInWithPopup(firebaseAuth, provider)
+      .then(async (cred) => {
+        const token = await cred.user.getIdToken()
+        const userPayload = {
+          accountNo: cred.user.uid,
+          // Ensure email is a string to satisfy AuthUser type
+          email: cred.user.email ?? '',
+          role: ['user'],
+          exp: Date.now() + 24 * 60 * 60 * 1000,
+        }
+
+        auth.setUser(userPayload)
+        auth.setAccessToken(token)
+
+        const targetPath = redirectTo || '/'
+        navigate({ to: targetPath, replace: true })
+
+        return `Welcome, ${cred.user.email ?? 'user'}!`
+      })
+      .catch((err) => {
+        throw err
+      })
+      .finally(() => setIsLoading(false))
+
+    toast.promise(p, {
+      loading: `Signing in with ${providerName}...`,
+      success: (msg) => msg as string,
+      error: (err) => (err as Error).message || `Error signing in with ${providerName}`,
     })
   }
 
@@ -85,17 +140,68 @@ export function UserAuthForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn('grid gap-3', className)}
+        className={cn('grid gap-4 w-full', className)}
         {...props}
       >
+        {/* Primary call-to-action: social sign-ins (Google emphasized) */}
+        <div className="space-y-2">
+          <div className="text-center">
+            <h2 className="text-lg font-semibold">Sign in</h2>
+            <p className="text-sm text-muted-foreground">
+              Quick sign in — recommended for the best experience
+            </p>
+          </div>
+
+          <div className="grid gap-2">
+            <Button
+              variant="ghost"
+              size="lg"
+              className="w-full justify-center space-x-2 border"
+              type="button"
+              disabled={isLoading}
+              onClick={() => handleOAuthLogin('google')}
+              aria-label="Sign in with Google (recommended)"
+            >
+              <FcGoogle className="h-5 w-5" />
+              <span className="font-medium">Continue with Google</span>
+            </Button>
+
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full justify-center space-x-2"
+              type="button"
+              disabled={isLoading}
+              onClick={() => handleOAuthLogin('github')}
+              aria-label="Sign in with GitHub"
+            >
+              <FaGithub className="h-5 w-5" />
+              <span className="font-medium">Continue with GitHub</span>
+            </Button>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="relative my-3">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background text-muted-foreground px-2">
+              Or use your email
+            </span>
+          </div>
+        </div>
+
+        {/* Email / Password form (secondary) */}
         <FormField
           control={form.control}
-          name='email'
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder='name@example.com' {...field} />
+                <Input placeholder="name@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -103,47 +209,28 @@ export function UserAuthForm({
         />
         <FormField
           control={form.control}
-          name='password'
+          name="password"
           render={({ field }) => (
-            <FormItem className='relative'>
+            <FormItem className="relative">
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <PasswordInput placeholder='********' {...field} />
+                <PasswordInput placeholder="********" {...field} />
               </FormControl>
               <FormMessage />
               <Link
-                to='/forgot-password'
-                className='text-muted-foreground absolute end-0 -top-0.5 text-sm font-medium hover:opacity-75'
+                to="/forgot-password"
+                className="text-muted-foreground absolute end-0 -top-0.5 text-sm font-medium hover:opacity-75"
               >
                 Forgot password?
               </Link>
             </FormItem>
           )}
         />
-        <Button className='mt-2' disabled={isLoading}>
-          {isLoading ? <Loader2 className='animate-spin' /> : <LogIn />}
-          Sign in
+
+        <Button className="mt-2 w-full" type="submit" disabled={isLoading}>
+          {isLoading ? <Loader2 className="animate-spin" /> : <LogIn />}
+          <span className="ml-2">Sign in with email</span>
         </Button>
-
-        <div className='relative my-2'>
-          <div className='absolute inset-0 flex items-center'>
-            <span className='w-full border-t' />
-          </div>
-          <div className='relative flex justify-center text-xs uppercase'>
-            <span className='bg-background text-muted-foreground px-2'>
-              Or continue with
-            </span>
-          </div>
-        </div>
-
-        <div className='grid grid-cols-2 gap-2'>
-          <Button variant='outline' type='button' disabled={isLoading}>
-            <IconGithub className='h-4 w-4' /> GitHub
-          </Button>
-          <Button variant='outline' type='button' disabled={isLoading}>
-            <IconFacebook className='h-4 w-4' /> Facebook
-          </Button>
-        </div>
       </form>
     </Form>
   )

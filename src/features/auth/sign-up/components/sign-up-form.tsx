@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconFacebook, IconGithub } from '@/assets/brand-icons'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import {
   Form,
   FormControl,
@@ -15,6 +16,19 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/PasswordInput'
+import { useNavigate, Link } from '@tanstack/react-router'
+import { toast } from 'sonner'
+import { Loader2 } from 'lucide-react'
+import { useAuthStore } from '@/stores/auth-store'
+// Firebase
+import { auth as firebaseAuth } from '@/lib/firebase'
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  type User as FirebaseUser,
+} from 'firebase/auth'
 
 const formSchema = z
   .object({
@@ -38,6 +52,8 @@ export function SignUpForm({
   ...props
 }: React.HTMLAttributes<HTMLFormElement>) {
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
+  const { auth } = useAuthStore()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,23 +64,132 @@ export function SignUpForm({
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
+  
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+  async function finishSignIn(user: FirebaseUser) {
+    try {
+      const token = await user.getIdToken()
+      const userPayload = {
+        accountNo: user.uid,
+        email: user.email ?? '',
+        role: ['user'],
+        // placeholder expiry (can be updated by server-side sync)
+        exp: 0,
+      }
+
+      auth.setUser(userPayload)
+      auth.setAccessToken(token)
+      navigate({ to: '/', replace: true })
+    } catch (err) {
+      if (import.meta.env.DEV) console.error('finishSignIn error', err)
+      throw err
+    }
+  }
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsLoading(true)
+
+    const p = createUserWithEmailAndPassword(
+      firebaseAuth,
+      data.email,
+      data.password
+    )
+      .then(async (cred) => {
+        await finishSignIn(cred.user)
+        return `Welcome, ${cred.user.email ?? data.email}!`
+      })
+      .catch((err) => {
+        throw err
+      })
+      .finally(() => setIsLoading(false))
+
+    toast.promise(p, {
+      loading: 'Creating account...',
+      success: (msg) => msg as string,
+      error: (err) => (err as Error).message || 'Error creating account',
+    })
+  }
+
+  async function handleSocialSignup(providerName: 'google' | 'github') {
+    setIsLoading(true)
+    const provider =
+      providerName === 'google' ? new GoogleAuthProvider() : new GithubAuthProvider()
+
+    const p = signInWithPopup(firebaseAuth, provider)
+      .then(async (cred) => {
+        await finishSignIn(cred.user)
+        return `Welcome, ${cred.user.email ?? 'user'}!`
+      })
+      .catch((err) => {
+        throw err
+      })
+      .finally(() => setIsLoading(false))
+
+    toast.promise(p, {
+      loading: `Signing in with ${providerName}...`,
+      success: (msg) => msg as string,
+      error: (err) => (err as Error).message || `Error signing in with ${providerName}`,
+    })
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn('grid gap-3', className)}
+        className={cn('grid gap-4 w-full', className)}
         {...props}
       >
+        {/* Social-first CTA */}
+        <div className='space-y-2'>
+          <div className='text-center'>
+            <h2 className='text-lg font-semibold'>Create your account</h2>
+            <p className='text-sm text-muted-foreground'>
+              Quick start — sign up with Google or GitHub
+            </p>
+          </div>
+
+          <div className='grid gap-2'>
+            <Button
+              variant='ghost'
+              size='lg'
+              className='w-full justify-center space-x-2 border'
+              type='button'
+              disabled={isLoading}
+              onClick={() => handleSocialSignup('google')}
+              aria-label='Sign up with Google (recommended)'
+            >
+              <FcGoogle className='h-5 w-5' />
+              <span className='font-medium'>Continue with Google</span>
+            </Button>
+
+            <Button
+              variant='outline'
+              size='lg'
+              className='w-full justify-center space-x-2'
+              type='button'
+              disabled={isLoading}
+              onClick={() => handleSocialSignup('github')}
+              aria-label='Sign up with GitHub'
+            >
+              <FaGithub className='h-5 w-5' />
+              <span className='font-medium'>Continue with GitHub</span>
+            </Button>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className='relative my-3'>
+          <div className='absolute inset-0 flex items-center'>
+            <span className='w-full border-t' />
+          </div>
+          <div className='relative flex justify-center text-xs uppercase'>
+            <span className='bg-background text-muted-foreground px-2'>
+              Or sign up with email
+            </span>
+          </div>
+        </div>
+
+        {/* Email / Password fields */}
         <FormField
           control={form.control}
           name='email'
@@ -104,39 +229,17 @@ export function SignUpForm({
             </FormItem>
           )}
         />
-        <Button className='mt-2' disabled={isLoading}>
-          Create Account
+
+        <Button className='mt-2 w-full' type='submit' disabled={isLoading}>
+          {isLoading ? <Loader2 className='animate-spin' /> : 'Create Account'}
         </Button>
 
-        <div className='relative my-2'>
-          <div className='absolute inset-0 flex items-center'>
-            <span className='w-full border-t' />
-          </div>
-          <div className='relative flex justify-center text-xs uppercase'>
-            <span className='bg-background text-muted-foreground px-2'>
-              Or continue with
-            </span>
-          </div>
-        </div>
-
-        <div className='grid grid-cols-2 gap-2'>
-          <Button
-            variant='outline'
-            className='w-full'
-            type='button'
-            disabled={isLoading}
-          >
-            <IconGithub className='h-4 w-4' /> GitHub
-          </Button>
-          <Button
-            variant='outline'
-            className='w-full'
-            type='button'
-            disabled={isLoading}
-          >
-            <IconFacebook className='h-4 w-4' /> Facebook
-          </Button>
-        </div>
+        <p className='text-sm text-center mt-2'>
+          Already have an account?{' '}
+          <Link to='/sign-in' search={() => ({ redirect: '/' })} className='font-medium text-primary hover:underline'>
+            Sign in instead
+          </Link>
+        </p>
       </form>
     </Form>
   )

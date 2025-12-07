@@ -2,6 +2,7 @@ package types
 
 import (
 	"database/sql"
+	"html/template"
 	"reflect"
 	"time"
 )
@@ -28,6 +29,9 @@ const (
 	FieldDocument FieldType = "document"
 	FieldArchive  FieldType = "archive"
 	FieldMedia    FieldType = "media"
+	FieldHTML     FieldType = "html"
+	FieldCSS      FieldType = "css"
+	FieldJS       FieldType = "js"
 )
 
 type Field interface {
@@ -79,6 +83,12 @@ func DetectFieldType(t reflect.Type) FieldType {
 		return FieldText
 	case reflect.TypeOf(bool(false)):
 		return FieldBoolean
+	case reflect.TypeOf(HTML("")), reflect.TypeOf(template.HTML("")):
+		return FieldHTML
+	case reflect.TypeOf(CSS("")), reflect.TypeOf(template.CSS("")):
+		return FieldCSS
+	case reflect.TypeOf(JS("")), reflect.TypeOf(template.JS("")):
+		return FieldJS
 	case reflect.TypeOf(uint(0)), reflect.TypeOf(int(0)),
 		reflect.TypeOf(uint8(0)), reflect.TypeOf(int8(0)),
 		reflect.TypeOf(uint16(0)), reflect.TypeOf(int16(0)),

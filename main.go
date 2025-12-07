@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"os"
 
-	clerk "github.com/clerk/clerk-sdk-go/v2"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/pkg/args"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/pkg/logger"
@@ -21,8 +20,6 @@ var embeddedFiles embed.FS
 func main() {
 	util.LoadEnv()
 	logger.InitLogrus()
-	// Set your Clerk Secret Key (from your Dashboard → API Keys)
-	clerk.SetKey(os.Getenv("CLERK_SECRET_KEY"))
 
 	if args.Install() != nil ||
 		args.Version(embeddedVersion) != nil {

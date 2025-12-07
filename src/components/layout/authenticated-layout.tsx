@@ -11,7 +11,7 @@ import { ConfigDrawer } from '@/components/ConfigDrawer'
 // import { TopNav } from '@/components/layout/top-nav'
 import { Search } from '@/components/Search'
 import { ThemeSwitch } from '@/components/ThemeSwitch'
-import { UserButton } from '@clerk/clerk-react'
+import { ProfileDropdown } from '@/components/ProfileDropdown'
 type AuthenticatedLayoutProps = {
   children?: React.ReactNode
 }
@@ -46,8 +46,7 @@ export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
                     <Search />
                     <ThemeSwitch />
                     <ConfigDrawer />
-                    {/* <ProfileDropdown /> */}
-                    <UserButton />
+                    <ProfileDropdown />
                   </div>
                 </Header>
                 <Outlet />

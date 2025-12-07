@@ -11,7 +11,7 @@ import (
 // VerifyAuth verifies if the user is authenticated with valid token
 func VerifyAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userData, err := helper.ClerkGetUser(c)
+		userData, err := helper.GetFirebaseUser(c)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"success": false,

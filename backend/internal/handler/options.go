@@ -50,9 +50,8 @@ func GetOptions() gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{
 			"success": true,
 			"message": "",
-			"data":    data,
+			"data":    options,
 			"title":   title,
-			"options": options,
 		})
 	}
 }

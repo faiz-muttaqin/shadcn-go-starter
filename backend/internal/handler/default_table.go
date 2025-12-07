@@ -301,10 +301,10 @@ func GET_DEFAULT_TableDataHandler(db *gorm.DB, model interface{}, preload []stri
 				field := t.Field(j)
 				if jsonKey := field.Tag.Get("json"); jsonKey != "" && jsonKey != "-" {
 					if row.Field(j).Type() == reflect.TypeOf(time.Time{}) {
-						rowData[jsonKey] = row.Field(j).Interface().(time.Time).Format(util.T_YYYYMMDD_HHmmss)
+						rowData[jsonKey] = row.Field(j).Interface().(time.Time).Format(time.RFC3339) // Format ISO 8601
 					} else if row.Field(j).Type() == reflect.TypeOf(sql.NullTime{}) {
 						if row.Field(j).Interface().(sql.NullTime).Valid {
-							rowData[jsonKey] = row.Field(j).Interface().(sql.NullTime).Time.Format(util.T_YYYYMMDD_HHmmss)
+							rowData[jsonKey] = row.Field(j).Interface().(sql.NullTime).Time.Format(time.RFC3339) // Format ISO 8601
 						} else {
 							rowData[jsonKey] = ""
 						}

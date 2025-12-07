@@ -1,14 +1,18 @@
 package backend
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
 
 	"embed"
 
+	firebase "firebase.google.com/go"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/internal/database"
+	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/internal/helper"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/internal/middleware"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/internal/routes"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/pkg/clr"
@@ -17,6 +21,7 @@ import (
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/pkg/logger"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/pkg/util"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/pkg/version"
+	"google.golang.org/api/option"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -33,9 +38,6 @@ const (
 
 func StartServer(embeddedFiles embed.FS) {
 	isDevMode := util.IsDevMode()
-	if isDevMode {
-		fmt.Println(clr.BgYellow(clr.TextBlack("Development Mode")))
-	}
 	database.Init()
 	go func() {
 		kvstore.RDB = kvstore.InitRedis(
@@ -44,6 +46,17 @@ func StartServer(embeddedFiles embed.FS) {
 			os.Getenv("REDIS_DB"),
 		)
 	}()
+	cred := os.Getenv("FIREBASE_PRIVATE_KEY_JSON")
+	opt := option.WithCredentialsJSON([]byte(cred))
+	app, err := firebase.NewApp(context.Background(), nil, opt)
+	if err != nil {
+		log.Fatalf("error initializing app: %v\n", err)
+	}
+	// Inisialisasi Auth Client
+	if helper.FirebaseAuth, err = app.Auth(context.Background()); err != nil {
+		log.Fatalf("error getting Auth client: %v\n", err)
+	}
+
 	//HANDLE LOG WRITING
 	ginLogFile, err := logger.InitGinLogger()
 	if err != nil {
@@ -67,6 +80,7 @@ func StartServer(embeddedFiles embed.FS) {
 	logrus.Info(clr.TextCyan(" http://localhost" + util.Getenv("APP_LOCAL_HOST", ":8173") + " "))
 
 	if isDevMode { // Only run when in Go Run Mode
+		fmt.Println(clr.BgYellow(clr.TextBlack("Development Mode")))
 		go version.Generate(filepath.Join(os.Getenv("APP_DIR"), "package.json"))
 		go docs.GenerateSwaggerDoc(routes.R, filepath.Join(util.ThisFileDir(runtime.Caller(0)), DOCS_FILENAME), append(r1, r2...)...)
 	}

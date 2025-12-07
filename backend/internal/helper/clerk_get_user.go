@@ -18,8 +18,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var superUserEmails []string
-
 func ClerkGetUser(c *gin.Context) (*model.User, error) {
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
@@ -31,7 +29,6 @@ func ClerkGetUser(c *gin.Context) (*model.User, error) {
 	if t, ok := strings.CutPrefix(authHeader, "Bearer "); ok {
 		token = t
 	}
-
 	if token == "" {
 		return nil, fmt.Errorf("invalid token")
 	}
