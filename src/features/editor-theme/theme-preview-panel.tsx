@@ -1,0 +1,275 @@
+// import ShadcnBlocksLogo from "@/assets/shadcnblocks.svg";
+import { HorizontalScrollArea } from "@/components/horizontal-scroll-area";
+import { ThemeSwitch } from "@/components/ThemeSwitch";
+import { TooltipWrapper } from "@/components/TooltipWrapper";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
+import { useFullscreen } from "@/hooks/use-fullscreen";
+// import { useThemeInspector } from "@/hooks/use-theme-inspector";
+import { cn } from "@/lib/utils";
+import { type ThemeEditorPreviewProps } from "@/types/theme";
+import { Inspect, Maximize, Minimize, MoreVertical } from "lucide-react";
+// import Link from "next/link";
+import React,{ lazy } from "react";
+// import InspectorOverlay from "./inspector-overlay";
+import ColorPreview from "./components/theme-preview/color-preview";
+import ExamplesPreviewContainer from "./components/theme-preview/examples-preview-container";
+import TabsTriggerPill from "./components/theme-preview/tabs-trigger-pill";
+// Lightweight replacement for `useQueryState` from `nuqs`.
+function useQueryStateLocal(key: string, opts: { defaultValue?: string } = {}) {
+  const { defaultValue } = opts;
+  const read = () => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(key) ?? defaultValue ?? undefined;
+    } catch {
+      return defaultValue ?? undefined;
+    }
+  };
+
+  const [state, setState] = React.useState<string | undefined>(read);
+
+  React.useEffect(() => {
+    const onPop = () => setState(read());
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const setQuery = (value: string | null) => {
+    const params = new URLSearchParams(window.location.search);
+    if (value == null) params.delete(key);
+    else params.set(key, value);
+    const search = params.toString();
+    const newUrl = search ? `${window.location.pathname}?${search}${window.location.hash}` : `${window.location.pathname}${window.location.hash}`;
+    window.history.replaceState({}, "", newUrl);
+    // reflect actual value from URL or fallback to default
+    const newState = params.get(key) ?? defaultValue ?? undefined;
+    setState(newState);
+  };
+
+  return [state, setQuery] as const;
+}
+
+const DemoCards = lazy(() => import("@/components/examples/cards"));
+const DemoMail = lazy(() => import("@/components/examples/mail"));
+const DemoDashboard = lazy(() => import("@/components/examples/dashboard"));
+const DemoPricing = lazy(() => import("@/components/examples/pricing/pricing"));
+const TypographyDemo = lazy(() => import("@/components/examples/typography/typography-demo"));
+// const CustomDemo = lazy(() => import("@/components/examples/custom"));
+
+const ThemePreviewPanel = ({ styles, currentMode }: ThemeEditorPreviewProps) => {
+  const { isFullscreen, toggleFullscreen } = useFullscreen();
+  const [activeTab, setActiveTab] = useQueryStateLocal("p", {
+    defaultValue: "cards",
+  });
+
+  // const {
+  //   rootRef,
+  //   inspector,
+  //   inspectorEnabled,
+  //   handleMouseMove,
+  //   handleMouseLeave,
+  //   toggleInspector,
+  // } = useThemeInspector();
+
+  if (!styles || !styles[currentMode]) {
+    return null;
+  }
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
+
+  return (
+    <>
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col",
+          isFullscreen && "bg-background fixed inset-0 z-50"
+        )}
+      >
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex flex-1 flex-col overflow-hidden"
+        >
+          <HorizontalScrollArea className="mt-2 mb-1 flex w-full items-center justify-between px-4">
+            <TabsList className="bg-background text-muted-foreground inline-flex w-fit items-center justify-center rounded-full px-0">
+              <TabsTriggerPill value="components">Components</TabsTriggerPill>
+              <TabsTriggerPill value="cards">Cards</TabsTriggerPill>
+
+              <div className="hidden md:flex">
+                <TabsTriggerPill value="dashboard">Dashboard</TabsTriggerPill>
+                <TabsTriggerPill value="mail">Mail</TabsTriggerPill>
+              </div>
+              <TabsTriggerPill value="pricing">Pricing</TabsTriggerPill>
+              <TabsTriggerPill value="colors">Color Palette</TabsTriggerPill>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <TooltipWrapper label="More previews" asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreVertical />
+                    </Button>
+                  </TooltipWrapper>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => handleTabChange("typography")}>
+                    Typography
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TabsList>
+
+            <div className="flex items-center gap-0.5">
+              {isFullscreen && (
+                <ThemeSwitch
+                  // variant="ghost"
+                  // size="icon"
+                  // className="group size-8 hover:[&>svg]:scale-120 hover:[&>svg]:transition-all"
+                />
+              )}
+              {/* Inspector toggle button */}
+              <TooltipWrapper label="Toggle Inspector" asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  // onClick={toggleInspector}
+                  className={cn(
+                    "group size-8",
+                    // inspectorEnabled && 
+                    "bg-accent text-accent-foreground w-auto"
+                  )}
+                >
+                  <Inspect className="transition-all group-hover:scale-120" />
+                  {/* {inspectorEnabled && <span className="text-xs tracking-wide uppercase">on</span>} */}
+                </Button>
+              </TooltipWrapper>
+              <TooltipWrapper
+                label={isFullscreen ? "Exit full screen" : "Full screen"}
+                className="hidden md:inline-flex"
+                asChild
+              >
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleFullscreen}
+                  className="group size-8"
+                >
+                  {isFullscreen ? (
+                    <Minimize className="transition-all group-hover:scale-120" />
+                  ) : (
+                    <Maximize className="transition-all group-hover:scale-120" />
+                  )}
+                </Button>
+              </TooltipWrapper>
+            </div>
+          </HorizontalScrollArea>
+
+          <section className="relative size-full overflow-hidden p-4 pt-1">
+            <div
+              className="relative isolate size-full overflow-hidden rounded-lg border"
+              // ref={rootRef}
+              // onMouseMove={handleMouseMove}
+              // onMouseLeave={handleMouseLeave}
+            >
+              <TabsContent value="cards" className="m-0 size-full">
+                <ExamplesPreviewContainer className="size-full">
+                  <ScrollArea className="size-full">
+                    <DemoCards />
+                  </ScrollArea>
+                </ExamplesPreviewContainer>
+              </TabsContent>
+
+              <TabsContent value="components" className="@container m-0 size-full">
+                <ExamplesPreviewContainer className="size-full">
+                  {/* <CustomDemo /> */}
+                  <h1>Component Will Show here </h1>
+                </ExamplesPreviewContainer>
+              </TabsContent>
+
+              <TabsContent value="dashboard" className="@container m-0 size-full">
+                <ExamplesPreviewContainer className="size-full">
+                  <ScrollArea className="size-full">
+                    <div className="size-full min-w-[1400px]">
+                      <DemoDashboard />
+                    </div>
+                    <ScrollBar orientation="horizontal" />
+                  </ScrollArea>
+                </ExamplesPreviewContainer>
+              </TabsContent>
+
+              <TabsContent value="pricing" className="@container mt-0 h-full space-y-6">
+                <ExamplesPreviewContainer className="size-full">
+                  <div className="absolute top-4 right-4 z-10">
+                    <a
+                      href="https://shadcnblocks.com?utm_source=tweakcn&utm_medium=theme-editor-preview"
+                      target="_blank"
+                    >
+                      <Button variant="outline" className="group h-12 shadow-sm">
+                        <div className="flex items-center gap-2">
+                          {/* <ShadcnBlocksLogo
+                            className="shrink-0"
+                            style={{ width: "24px", height: "24px" }}
+                          /> */}
+                          <div className="text-left">
+                            <div className="font-bold">Shadcnblocks.com</div>
+                            <div className="text-muted-foreground group-hover:text-accent-foreground text-xs transition-colors">
+                              600+ extra shadcn blocks
+                            </div>
+                          </div>
+                        </div>
+                      </Button>
+                    </a>
+                  </div>
+                  <ScrollArea className="size-full">
+                    <DemoPricing />
+                  </ScrollArea>
+                </ExamplesPreviewContainer>
+              </TabsContent>
+
+              <TabsContent value="mail" className="@container m-0 size-full">
+                <ExamplesPreviewContainer className="size-full">
+                  <ScrollArea className="size-full">
+                    <div className="size-full min-w-[1300px]">
+                      <DemoMail />
+                    </div>
+                    <ScrollBar orientation="horizontal" />
+                  </ScrollArea>
+                </ExamplesPreviewContainer>
+              </TabsContent>
+
+              <TabsContent value="typography" className="m-0 size-full">
+                <ExamplesPreviewContainer className="size-full">
+                  <ScrollArea className="size-full">
+                    <TypographyDemo />
+                  </ScrollArea>
+                </ExamplesPreviewContainer>
+              </TabsContent>
+
+              <TabsContent value="colors" className="m-0 size-full">
+                <ScrollArea className="size-full">
+                  <div className="p-4">
+                    <ColorPreview styles={styles} currentMode={currentMode} />
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+            </div>
+          </section>
+        </Tabs>
+      </div>
+
+      {/* <InspectorOverlay inspector={inspector} enabled={inspectorEnabled} rootRef={rootRef} /> */}
+    </>
+  );
+};
+
+export default ThemePreviewPanel;

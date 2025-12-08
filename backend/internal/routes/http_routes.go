@@ -28,5 +28,11 @@ func Routes() {
 		api.PATCH("/users", handler.PATCH_DEFAULT_TableDataHandler(database.DB, &model.User{}, []string{"UserRole"}))
 		api.PUT("/users", handler.PUT_DEFAULT_TableDataHandler(database.DB, &model.User{}, []string{"UserRole"}))
 		api.DELETE("/users", handler.DELETE_DEFAULT_TableDataHandler(database.DB, &model.User{}))
+
+		// Theme endpoints
+		api.GET("/themes", handler.GET_DEFAULT_TableDataHandler(database.DB, &model.Theme{}, []string{}))
+		api.POST("/themes", handler.POST_DEFAULT_TableDataHandler(database.DB, &model.Theme{}, []string{}))
+		api.PATCH("/themes", handler.PATCH_DEFAULT_TableDataHandler(database.DB, &model.Theme{}, []string{}))
+		api.DELETE("/themes", handler.DELETE_DEFAULT_TableDataHandler(database.DB, &model.Theme{}))
 	}
 }

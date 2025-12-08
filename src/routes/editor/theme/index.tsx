@@ -1,3 +1,4 @@
+import Editor from '@/features/editor-theme/editor'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/editor/theme/')({
@@ -5,5 +6,5 @@ export const Route = createFileRoute('/editor/theme/')({
 })
 
 function RouteComponent() {
-    return <div>Hello "/"!</div>
+    return <Editor themePromise={Promise.resolve(null)} />
 }

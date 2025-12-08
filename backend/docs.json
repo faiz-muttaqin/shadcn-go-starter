@@ -87,7 +87,7 @@
   "info": {
     "description": "API Documentation for shadcn-admin-go-starter",
     "title": "shadcn-admin-go-starter",
-    "version": "2.2.808"
+    "version": "2.2.814"
   },
   "openapi": "3.0.4",
   "paths": {
@@ -12412,6 +12412,227 @@
         },
         "security": null,
         "summary": "Get all GetRoles",
+        "tags": [
+          "Api"
+        ]
+      }
+    },
+    "/api/themes": {
+      "delete": {
+        "description": "Remove an existing resource",
+        "operationId": "deleteApiThemes",
+        "parameters": null,
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "properties": {},
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example1": {
+                    "value": {
+                      "success": "true"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Response 200"
+          },
+          "204": {
+            "description": "Resource deleted successfully"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example1": {
+                    "value": {
+                      "error": "*ast.CallExpr"
+                    }
+                  },
+                  "Example2": {
+                    "value": {
+                      "error": "No ID provided",
+                      "message": "No ID provided",
+                      "success": "false"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Response 400"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized - Authentication required"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden - Insufficient permissions"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not found - Resource does not exist"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example1": {
+                    "value": {
+                      "error": "*ast.CallExpr"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Response 500"
+          }
+        },
+        "security": null,
+        "summary": "Delete DELETE_DEFAULT_TableDataHandler",
+        "tags": [
+          "Api"
+        ]
+      }
+    },
+    "/api/themes/:id": {
+      "delete": {
+        "description": "Remove an existing resource",
+        "operationId": "deleteApiThemes:Id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "properties": {},
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example1": {
+                    "value": {
+                      "success": "true"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Response 200"
+          },
+          "204": {
+            "description": "Resource deleted successfully"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example1": {
+                    "value": {
+                      "error": "*ast.CallExpr"
+                    }
+                  },
+                  "Example2": {
+                    "value": {
+                      "error": "No ID provided",
+                      "message": "No ID provided",
+                      "success": "false"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Response 400"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized - Authentication required"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden - Insufficient permissions"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not found - Resource does not exist"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example1": {
+                    "value": {
+                      "error": "*ast.CallExpr"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Response 500"
+          }
+        },
+        "security": null,
+        "summary": "Delete DELETE_DEFAULT_TableDataHandler",
         "tags": [
           "Api"
         ]

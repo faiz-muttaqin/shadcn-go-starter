@@ -27,7 +27,7 @@ type ResponsiveDialogProviderProps = {
 } & ResponsiveDialogContextProps;
 
 const ResponsiveDialogContext = React.createContext<ResponsiveDialogContextProps | null>(null);
-const MOBILE_BREAKPOINT = "(min-width: 640px)";
+// const MOBILE_BREAKPOINT = "(min-width: 640px)";
 
 const ResponsiveDialogProvider = ({
   modal = true,

@@ -1,0 +1,31 @@
+// import { ActionBarButtons } from "./components/action-bar-buttons";
+import { HorizontalScrollArea } from "@/components/horizontal-scroll-area";
+// import { DialogActionsProvider, useDialogActions } from "@/hooks/use-dialog-actions";
+
+export function ActionBar() {
+  return (
+      <ActionBarContent />
+    // <DialogActionsProvider>
+    // </DialogActionsProvider>
+  );
+}
+
+function ActionBarContent() {
+  // const { isCreatingTheme, handleSaveClick, handleShareClick, setCssImportOpen, setCodePanelOpen } =
+  //   useDialogActions();
+
+  return (
+    <div className="border-b">
+      <HorizontalScrollArea className="flex h-14 w-full items-center justify-end gap-4 px-4">
+        ActionBarButtons
+        {/* <ActionBarButtons
+          onImportClick={() => setCssImportOpen(true)}
+          onCodeClick={() => setCodePanelOpen(true)}
+          onSaveClick={() => handleSaveClick()}
+          isSaving={isCreatingTheme}
+          onShareClick={handleShareClick}
+        /> */}
+      </HorizontalScrollArea>
+    </div>
+  );
+}

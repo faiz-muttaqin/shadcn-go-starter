@@ -24,6 +24,7 @@ import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authOtpRouteImport } from './routes/(auth)/otp'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
+import { Route as EditorThemeRouteRouteImport } from './routes/editor/theme/route'
 import { Route as DashboardAuthenticatedRouteRouteImport } from './routes/dashboard/_authenticated/route'
 import { Route as EditorThemeIndexRouteImport } from './routes/editor/theme/index'
 import { Route as DashboardAuthenticatedIndexRouteImport } from './routes/dashboard/_authenticated/index'
@@ -111,15 +112,20 @@ const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => authRouteRoute,
 } as any)
+const EditorThemeRouteRoute = EditorThemeRouteRouteImport.update({
+  id: '/editor/theme',
+  path: '/editor/theme',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardAuthenticatedRouteRoute =
   DashboardAuthenticatedRouteRouteImport.update({
     id: '/_authenticated',
     getParentRoute: () => DashboardRoute,
   } as any)
 const EditorThemeIndexRoute = EditorThemeIndexRouteImport.update({
-  id: '/editor/theme/',
-  path: '/editor/theme/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => EditorThemeRouteRoute,
 } as any)
 const DashboardAuthenticatedIndexRoute =
   DashboardAuthenticatedIndexRouteImport.update({
@@ -203,6 +209,7 @@ const DashboardAuthenticatedErrorsErrorRoute =
 export interface FileRoutesByFullPath {
   '/': typeof authRouteRouteWithChildren
   '/dashboard': typeof DashboardAuthenticatedRouteRouteWithChildren
+  '/editor/theme': typeof EditorThemeRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/otp': typeof authOtpRoute
@@ -216,7 +223,7 @@ export interface FileRoutesByFullPath {
   '/503': typeof errors503Route
   '/dashboard/settings': typeof DashboardAuthenticatedSettingsRouteRouteWithChildren
   '/dashboard/': typeof DashboardAuthenticatedIndexRoute
-  '/editor/theme': typeof EditorThemeIndexRoute
+  '/editor/theme/': typeof EditorThemeIndexRoute
   '/dashboard/errors/$error': typeof DashboardAuthenticatedErrorsErrorRoute
   '/dashboard/settings/account': typeof DashboardAuthenticatedSettingsAccountRoute
   '/dashboard/settings/appearance': typeof DashboardAuthenticatedSettingsAppearanceRoute
@@ -262,6 +269,7 @@ export interface FileRoutesById {
   '/(auth)': typeof authRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/_authenticated': typeof DashboardAuthenticatedRouteRouteWithChildren
+  '/editor/theme': typeof EditorThemeRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/otp': typeof authOtpRoute
@@ -293,6 +301,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/editor/theme'
     | '/forgot-password'
     | '/login'
     | '/otp'
@@ -306,7 +315,7 @@ export interface FileRouteTypes {
     | '/503'
     | '/dashboard/settings'
     | '/dashboard/'
-    | '/editor/theme'
+    | '/editor/theme/'
     | '/dashboard/errors/$error'
     | '/dashboard/settings/account'
     | '/dashboard/settings/appearance'
@@ -351,6 +360,7 @@ export interface FileRouteTypes {
     | '/(auth)'
     | '/dashboard'
     | '/dashboard/_authenticated'
+    | '/editor/theme'
     | '/(auth)/forgot-password'
     | '/(auth)/login'
     | '/(auth)/otp'
@@ -382,12 +392,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authRouteRoute: typeof authRouteRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
+  EditorThemeRouteRoute: typeof EditorThemeRouteRouteWithChildren
   errors401Route: typeof errors401Route
   errors403Route: typeof errors403Route
   errors404Route: typeof errors404Route
   errors500Route: typeof errors500Route
   errors503Route: typeof errors503Route
-  EditorThemeIndexRoute: typeof EditorThemeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -490,6 +500,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof authRouteRoute
     }
+    '/editor/theme': {
+      id: '/editor/theme'
+      path: '/editor/theme'
+      fullPath: '/editor/theme'
+      preLoaderRoute: typeof EditorThemeRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/_authenticated': {
       id: '/dashboard/_authenticated'
       path: '/dashboard'
@@ -499,10 +516,10 @@ declare module '@tanstack/react-router' {
     }
     '/editor/theme/': {
       id: '/editor/theme/'
-      path: '/editor/theme'
-      fullPath: '/editor/theme'
+      path: '/'
+      fullPath: '/editor/theme/'
       preLoaderRoute: typeof EditorThemeIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EditorThemeRouteRoute
     }
     '/dashboard/_authenticated/': {
       id: '/dashboard/_authenticated/'
@@ -694,16 +711,27 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
 
+interface EditorThemeRouteRouteChildren {
+  EditorThemeIndexRoute: typeof EditorThemeIndexRoute
+}
+
+const EditorThemeRouteRouteChildren: EditorThemeRouteRouteChildren = {
+  EditorThemeIndexRoute: EditorThemeIndexRoute,
+}
+
+const EditorThemeRouteRouteWithChildren =
+  EditorThemeRouteRoute._addFileChildren(EditorThemeRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authRouteRoute: authRouteRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
+  EditorThemeRouteRoute: EditorThemeRouteRouteWithChildren,
   errors401Route: errors401Route,
   errors403Route: errors403Route,
   errors404Route: errors404Route,
   errors500Route: errors500Route,
   errors503Route: errors503Route,
-  EditorThemeIndexRoute: EditorThemeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

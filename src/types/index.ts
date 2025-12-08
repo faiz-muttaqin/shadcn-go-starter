@@ -1,4 +1,4 @@
-// import { FocusColorId } from "@/store/color-control-focus-store";
+import { type FocusColorId } from "@/stores/color-control-focus-store";
 
 export type ControlSectionProps = {
   title: string;
@@ -24,7 +24,7 @@ export type ColorPickerProps = {
    * (Optional) Identifier that maps this color picker to a theme style key.
    * When provided, it enables programmatic focusing via `focusColorControl()`.
    */
-  // name?: FocusColorId;
+  name?: FocusColorId;
 };
 
 export type SliderInputProps = {
