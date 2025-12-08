@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 // import { Link } from "@tanstack/react-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { ThemeSwitch } from "@/components/ThemeSwitch";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { TooltipWrapper } from "@/components/TooltipWrapper";
 
 interface ThemePresetSelectProps extends React.ComponentProps<typeof Button> {
@@ -78,7 +78,7 @@ const ThemeControls = () => {
 
   return (
     <div className="flex gap-1">
-      <ThemeSwitch />
+      <ThemeToggle  variant="ghost" size="icon" className="size-6 p-1" />
 
       <TooltipWrapper label="Random theme" asChild>
         <Button variant="ghost" size="sm" className="size-6 p-1" onClick={randomize}>

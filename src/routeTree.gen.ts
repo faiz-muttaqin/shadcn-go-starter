@@ -207,7 +207,7 @@ const DashboardAuthenticatedErrorsErrorRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof authRouteRouteWithChildren
+  '/': typeof IndexRoute
   '/dashboard': typeof DashboardAuthenticatedRouteRouteWithChildren
   '/editor/theme': typeof EditorThemeRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
@@ -237,7 +237,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/users': typeof DashboardAuthenticatedUsersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof authRouteRouteWithChildren
+  '/': typeof IndexRoute
   '/dashboard': typeof DashboardAuthenticatedIndexRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
@@ -411,8 +411,8 @@ declare module '@tanstack/react-router' {
     }
     '/(auth)': {
       id: '/(auth)'
-      path: '/'
-      fullPath: '/'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof authRouteRouteImport
       parentRoute: typeof rootRouteImport
     }

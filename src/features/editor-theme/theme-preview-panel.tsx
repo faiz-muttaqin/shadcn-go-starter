@@ -1,6 +1,6 @@
 // import ShadcnBlocksLogo from "@/assets/shadcnblocks.svg";
 import { HorizontalScrollArea } from "@/components/horizontal-scroll-area";
-import { ThemeSwitch } from "@/components/ThemeSwitch";
+// import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { TooltipWrapper } from "@/components/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,7 @@ import React,{ lazy } from "react";
 import ColorPreview from "./components/theme-preview/color-preview";
 import ExamplesPreviewContainer from "./components/theme-preview/examples-preview-container";
 import TabsTriggerPill from "./components/theme-preview/tabs-trigger-pill";
+import { ThemeToggle } from "./components/action-bar/components/theme-toggle";
 // Lightweight replacement for `useQueryState` from `nuqs`.
 function useQueryStateLocal(key: string, opts: { defaultValue?: string } = {}) {
   const { defaultValue } = opts;
@@ -131,7 +132,7 @@ const ThemePreviewPanel = ({ styles, currentMode }: ThemeEditorPreviewProps) => 
 
             <div className="flex items-center gap-0.5">
               {isFullscreen && (
-                <ThemeSwitch
+                <ThemeToggle
                   // variant="ghost"
                   // size="icon"
                   // className="group size-8 hover:[&>svg]:scale-120 hover:[&>svg]:transition-all"

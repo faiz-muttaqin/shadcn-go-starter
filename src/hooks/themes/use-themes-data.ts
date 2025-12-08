@@ -2,10 +2,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getThemes, getTheme } from "@/actions/themes";
 import { type Theme } from "@/types/theme";
 
+export type ThemeFilters = Record<string, unknown>;
+
 export const themeKeys = {
   all: ["themes"] as const,
   lists: () => [...themeKeys.all, "list"] as const,
-  list: (filters: Record<string, any>) => [...themeKeys.lists(), { filters }] as const,
+  list: (filters: ThemeFilters) => [...themeKeys.lists(), { filters }] as const,
   details: () => [...themeKeys.all, "detail"] as const,
   detail: (id: string) => [...themeKeys.details(), { id }] as const,
 };

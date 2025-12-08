@@ -1,4 +1,5 @@
-import McpIcon from "@/assets/mcp.svg";
+// import McpIcon from "@/assets/mcp.svg";
+import { CiServer } from "react-icons/ci";
 // import ContrastChecker from "@/components/editor/contrast-checker";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,7 +30,8 @@ export function MoreOptions({ ...props }: MoreOptionsProps) {
         <DropdownMenuContent align="end" className="text-foreground">
           <DropdownMenuItem onClick={() => setMcpDialogOpen(true)} asChild>
             <Button variant="ghost" size="sm" className="w-full justify-start">
-              <McpIcon  />
+              {/* <McpIcon  /> */}
+              <CiServer />
               <span className="text-sm">MCP</span>
             </Button>
           </DropdownMenuItem>

@@ -26,7 +26,7 @@ func NoRouteDefaultFiles(embedDistFolder fs.FS, isDevMode bool) []string {
 	if isDevMode {
 		useFrontendProxy = CheckIsProxyAvailable()
 	}
-	files, _ := fs.Sub(embedDistFolder, "build")
+	files, _ := fs.Sub(embedDistFolder, "dist")
 	subFS, err := fs.Sub(files, ".")
 	if err != nil {
 		panic(err)
