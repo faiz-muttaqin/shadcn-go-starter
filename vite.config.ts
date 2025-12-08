@@ -30,14 +30,14 @@ export default defineConfig({
     include: [
       'react',
       'react-dom',
-      'react/jsx-runtime',
-      'react/jsx-dev-runtime',
-      'react-dom/client',
-      'axios',
-      'sonner',
-      '@tanstack/react-query',
-      '@tanstack/react-router',
-      // Radix primitives used by the project - list them explicitly
+      // 'react/jsx-runtime',
+      // 'react/jsx-dev-runtime',
+      // 'react-dom/client',
+      // 'axios',
+      // 'sonner',
+      // '@tanstack/react-query',
+      // '@tanstack/react-router',
+      // // Radix primitives used by the project - list them explicitly
       // '@radix-ui/react-tooltip',
       // '@radix-ui/react-dialog',
       // '@radix-ui/react-popover',
@@ -55,6 +55,6 @@ export default defineConfig({
       // '@radix-ui/react-separator',
       // '@radix-ui/react-slot',
     ],
-    force: true,
+    // force: true,
   },
 })

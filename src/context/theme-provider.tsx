@@ -15,6 +15,7 @@ type ThemeProviderProps = {
   defaultTheme?: Theme
   storageKey?: string
 }
+type Coords = { x: number; y: number };
 
 type ThemeProviderState = {
   defaultTheme: Theme
@@ -22,6 +23,7 @@ type ThemeProviderState = {
   theme: Theme
   setTheme: (theme: Theme) => void
   resetTheme: () => void
+  toggleTheme: (coords?: Coords) => void;
 }
 
 const initialState: ThemeProviderState = {
@@ -30,6 +32,7 @@ const initialState: ThemeProviderState = {
   theme: DEFAULT_THEME,
   setTheme: () => null,
   resetTheme: () => null,
+  toggleTheme: () => null,
 }
 
 const ThemeContext = createContext<ThemeProviderState>(initialState)
@@ -104,6 +107,38 @@ export function ThemeProvider({
     removeCookie(storageKey)
     _setTheme(DEFAULT_THEME)
   }
+  const handleThemeChange = (newTheme: Theme) => {
+    setTheme(newTheme) // update cookie + ThemeProvider state
+  }
+
+  const handleThemeToggle = (coords?: Coords) => {
+    const root = document.documentElement;
+
+    const current =
+      theme === 'system'
+        ? resolvedTheme
+        : theme;
+
+    const next: Theme = current === 'light' ? 'dark' : 'light';
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (!document.startViewTransition || prefersReducedMotion) {
+      handleThemeChange(next);
+      return;
+    }
+
+    if (coords) {
+      root.style.setProperty("--x", `${coords.x}px`);
+      root.style.setProperty("--y", `${coords.y}px`);
+    }
+
+    document.startViewTransition(() => {
+      handleThemeChange(next);
+    });
+  };
 
   const contextValue = {
     defaultTheme,
@@ -111,6 +146,7 @@ export function ThemeProvider({
     resetTheme,
     theme,
     setTheme,
+    toggleTheme: handleThemeToggle,
   }
 
   return (

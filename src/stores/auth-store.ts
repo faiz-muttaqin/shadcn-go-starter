@@ -1,12 +1,49 @@
-// DEPRECATED compatibility shim for legacy imports of `useAuthStore`.
-// The app now uses `AuthProvider` + `useAuth()` context. Keep this file as a
-// light shim so any late/leftover imports don't crash; prefer removing this
-// entirely once the codebase is fully migrated.
-import { clearClientAuth } from '../lib/auth-utils'
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { PostLoginActionType, StoredPostLoginAction } from "@/hooks/use-post-login-action";
 
-export const useAuthStore = {
-  // mimic the old `getState().auth.reset()` usage
-  getState: () => ({ auth: { reset: clearClientAuth } }),
+interface AuthStore {
+  isOpen: boolean;
+  mode: "signin" | "signup";
+  postLoginAction: StoredPostLoginAction;
+  openAuthDialog: (
+    mode?: "signin" | "signup",
+    postLoginActionType?: PostLoginActionType,
+    postLoginActionData?: unknown
+  ) => void;
+  closeAuthDialog: () => void;
+  clearPostLoginAction: () => void;
 }
 
-export default useAuthStore
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set) => ({
+      isOpen: false,
+      mode: "signin",
+      postLoginAction: null,
+      openAuthDialog: (
+        newMode?: "signin" | "signup",
+        postLoginActionType?: PostLoginActionType,
+        postLoginActionData?: unknown
+      ) => {
+        set((state) => ({
+          isOpen: true,
+          mode: newMode || state.mode,
+          postLoginAction: postLoginActionType
+            ? { type: postLoginActionType, data: postLoginActionData }
+            : null,
+        }));
+      },
+      closeAuthDialog: () => {
+        set({ isOpen: false });
+      },
+      clearPostLoginAction: () => {
+        set({ postLoginAction: null });
+      },
+    }),
+    {
+      name: "auth-storage",
+      partialize: (state) => ({ postLoginAction: state.postLoginAction }),
+    }
+  )
+);

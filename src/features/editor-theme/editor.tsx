@@ -111,7 +111,6 @@ const Editor: React.FC<EditorProps> = ({ themePromise }) => {
             <TabsContent value="preview" className="mt-0 h-[calc(100%-2.5rem)]">
               <div className="flex h-full flex-col">
                 <ActionBar />
-                {/* ThemePreviewPanel */}
                 <ThemePreviewPanel styles={styles} currentMode={themeState.currentMode} />
               </div>
             </TabsContent>
@@ -147,7 +146,6 @@ const Editor: React.FC<EditorProps> = ({ themePromise }) => {
             <div className="flex h-full flex-col">
               <div className="flex min-h-0 flex-1 flex-col">
                 <ActionBar />
-                {/* ThemePreviewPanel */}
                 <ThemePreviewPanel styles={styles} currentMode={themeState.currentMode} />
               </div>
             </div>
