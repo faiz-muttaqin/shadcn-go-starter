@@ -17,7 +17,7 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { useFilterOptions,type FilterOption } from '@/hooks/use-filter-options'
-import apiClient from '@/lib/api-client'
+import {apiClient} from '@/lib/api/client'
 import type { TableColumn, TableSettings } from '@/types/auth'
 
 type ConfigurableTableEditDialogProps = {
@@ -174,7 +174,7 @@ function SelectionField({
                     <SelectValue placeholder={isLoading ? 'Loading...' : `Select ${col.name}`} />
                 </SelectTrigger>
                 <SelectContent>
-                    {items.map((item) => (
+                    {items.map((item: { label: string; value: string }) => (
                         <SelectItem key={item.value} value={item.value}>
                             {item.label}
                         </SelectItem>

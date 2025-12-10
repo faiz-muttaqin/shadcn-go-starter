@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import type { TableSettings } from '@/types/auth'
-import apiClient from '@/lib/api-client'
+import {apiClient} from '@/lib/api/client'
 
 type ConfigurableTableDeleteDialogProps = {
     open: boolean
