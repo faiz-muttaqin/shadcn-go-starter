@@ -9,8 +9,6 @@ var AuthenticatedFileRoutes = []string{
 	"/",
 	"/apps",
 	"/chats",
-	"/clerk",
-	"/clerk/user-management",
 	"/errors/$error",
 	"/help-center",
 	"/settings",

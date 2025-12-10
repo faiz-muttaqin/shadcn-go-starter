@@ -13,9 +13,6 @@ var R *gin.Engine
 func Routes() {
 	// Endpoint login API
 	r := R.Group(util.GetPathOnly(util.Getenv("VITE_BACKEND", "/api")))
-
-	r.GET("/options", handler.GetOptions())
-	// r.GET("/users/hehe", handler.GET_DEFAULT_TableDataHandler(database.DB, &model.User{}, []string{"Role"}))
 	api := r.Group("")
 	{
 		api.OPTIONS("/auth/login", handler.GetAuthLogin())

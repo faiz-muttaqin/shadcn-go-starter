@@ -87,7 +87,7 @@
   "info": {
     "description": "API Documentation for shadcn-admin-go-starter",
     "title": "shadcn-admin-go-starter",
-    "version": "2.2.817"
+    "version": "2.2.819"
   },
   "openapi": "3.0.4",
   "paths": {

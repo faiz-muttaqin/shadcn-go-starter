@@ -81,24 +81,6 @@ function Unauthorized({ currentPath }: { currentPath: string }) {
         <p className='text-muted-foreground text-center'>
           You must be authenticated
           <sup>
-            {/* <LearnMore open={opened} onOpenChange={_setOpened}>
-              <p>
-                This is the same as{' '}
-                <Link
-                  to='/dashboard/users'
-                  className='text-blue-500 underline decoration-dashed underline-offset-2'
-                >
-                  '/dashboard/users'
-                </Link>
-                .{' '}
-              </p>
-              <p>You must first sign in using Clerk to access this route. </p>
-
-              <p className='mt-4'>
-                After signing in, you'll be able to sign out or delete your
-                account via the User Profile dropdown on this page.
-              </p>
-            </LearnMore> */}
           </sup>
           <br />
           to access this resource.

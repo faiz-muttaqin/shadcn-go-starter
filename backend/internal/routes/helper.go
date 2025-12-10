@@ -10,7 +10,7 @@ import (
 // OR SETUP GIN
 func InitGinMode() {
 	if util.IsDevMode() {
-		gin.SetMode(util.Getenv("APP_GIN_MODE", "release"))
+
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 	}

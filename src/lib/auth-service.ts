@@ -2,7 +2,7 @@ import { apiClient } from '@/lib/api/client'
 import type { User } from '@/types/auth'
 
 /**
- * Fetch user data and table settings from backend after Clerk auth
+ * Fetch user data and table settings from backend after 
  */
 export async function syncUserData(): Promise<User | null> {
   try {

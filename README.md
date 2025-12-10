@@ -15,7 +15,7 @@ This project combines a modern React frontend with a powerful Go backend, provid
 - 📊 Data tables with sorting, filtering, and pagination
 - 📈 Charts and visualizations with Recharts
 - 🎯 Type-safe routing with TanStack Router
-- 🔐 Authentication UI with Clerk integration
+
 
 ### Backend
 - ⚡ High-performance Go backend with Gin framework
@@ -94,7 +94,6 @@ If you want to update components using the Shadcn CLI (e.g., `npx shadcn@latest 
 
 **Icons:** [Lucide Icons](https://lucide.dev/icons/), [Tabler Icons](https://tabler.io/icons)
 
-**Auth:** [Clerk](https://go.clerk.com/GttUAaK)
 
 **HTTP Client:** [Axios](https://axios-http.com/)
 
@@ -197,10 +196,6 @@ DB_DSN="./data/app.db"
 # API Documentation
 APP_ENABLE_SWAGGER="true"
 APP_DOCS_PATH="/docs"
-
-# Authentication (Clerk)
-VITE_CLERK_PUBLISHABLE_KEY="your_clerk_publishable_key"
-CLERK_SECRET_KEY="your_clerk_secret_key"
 
 # Security
 APP_ENABLE_BEARER="true"

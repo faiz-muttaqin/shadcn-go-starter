@@ -13,7 +13,6 @@ import (
 	firebase "firebase.google.com/go"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/internal/database"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/internal/helper"
-	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/internal/middleware"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/internal/routes"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/pkg/clr"
 	"github.com/faiz-muttaqin/shadcn-admin-go-starter/backend/pkg/docs"
@@ -64,11 +63,10 @@ func StartServer(embeddedFiles embed.FS) {
 	}
 	defer ginLogFile.Close()
 
-	// routes.R.Use(middleware.CacheControlMiddleware())
+	gin.SetMode(util.Getenv("APP_GIN_MODE", "release"))
 	routes.InitGinMode()
 	routes.R = gin.Default()
 	routes.R.Use(logger.GinLoggerMiddleware(ginLogFile))
-	routes.R.Use(middleware.Security())
 	routes.R.Use(cors.Default())
 
 	routes.WebSocketRoutes()
