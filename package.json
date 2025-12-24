@@ -1,9 +1,9 @@
 {
   "basepath": "/api",
-  "datetime": "2025-12-10 08:29:11",
+  "datetime": "2025-12-24 17:01:28",
   "name": "shadcn-admin-go-starter",
   "private": false,
-  "version": "2.2.819",
+  "version": "2.2.820",
   "type": "module",
   "scripts": {
     "dev": "vite",

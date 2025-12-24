@@ -87,7 +87,7 @@
   "info": {
     "description": "API Documentation for shadcn-admin-go-starter",
     "title": "shadcn-admin-go-starter",
-    "version": "2.2.819"
+    "version": "2.2.820"
   },
   "openapi": "3.0.4",
   "paths": {
@@ -12038,9 +12038,9 @@
       }
     },
     "/api/auth/login": {
-      "options": {
-        "description": "Perform options operation on /api/auth/login",
-        "operationId": "optionsApiAuthLogin",
+      "get": {
+        "description": "Retrieve a list of resources with optional filtering and pagination",
+        "operationId": "getApiAuthLogin",
         "parameters": null,
         "requestBody": {},
         "responses": {
@@ -12087,6 +12087,16 @@
             },
             "description": "Forbidden - Insufficient permissions"
           },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not found - Resource does not exist"
+          },
           "500": {
             "content": {
               "application/json": {
@@ -12099,7 +12109,7 @@
           }
         },
         "security": null,
-        "summary": "OPTIONS Get Auth Login",
+        "summary": "Get all GetAuthLogin",
         "tags": [
           "Api"
         ]
